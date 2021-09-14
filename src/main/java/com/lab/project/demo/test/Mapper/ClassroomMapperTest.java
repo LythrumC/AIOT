@@ -55,7 +55,7 @@ public class ClassroomMapperTest {
 
     @Test
     public void selectAllClassroom(){
-        List<ClassroomEntity> classroomEntities = classroomMapper.selectClassroomByKeyword("");
+        List<ClassroomEntity> classroomEntities = classroomMapper.selectAllClassroom("AIOT");
         System.out.println(classroomEntities);
 
     }

@@ -9,9 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.ObjectStreamClass;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author 陈宽
@@ -29,22 +32,27 @@ public class ClassroomController {
     @PostMapping("/add")
     public AjaxResult addClassroom(@RequestBody ClassroomEntity classroomEntity){
         Date date = new Date();
-        String format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
+        String format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(date);
         classroomEntity.setCreateTime(date);
         classroomEntity.setCreateBy("student");
-        classroomEntity.setVersion(new Long(1));
+        classroomEntity.setVersion(new Long(0));
         classroomEntity.setDelFlag("0");
         classroomService.addClassroom(classroomEntity);
         return AjaxResult.success("新增成功");
     }
 
 
-    @GetMapping("/list?pageNum=1&pageSize=10")
-    public AjaxResult getPageInfo(@RequestParam(value = "keyword", defaultValue = "") String keyword){
+    @GetMapping("/list")
+    public AjaxResult selectAllClassroom(String classroomName){
+        List<ClassroomEntity> classroomEntities = null;
         // 调用service方法获取PageInfo对象
-        PageInfo<ClassroomEntity> pageInfo = classroomService.getPageInfo(keyword);
-
-        return AjaxResult.success();
+        if (classroomName != null){
+            classroomEntities = classroomService.selectAllClassroom(classroomName);
+        } else {
+            classroomEntities = classroomService.selectAllClassroom("");
+        }
+        System.out.println(classroomEntities);
+        return AjaxResult.success("查询成功",classroomEntities);
     }
 
 

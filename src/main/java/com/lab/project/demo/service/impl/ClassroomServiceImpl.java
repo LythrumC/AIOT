@@ -33,16 +33,9 @@ public class ClassroomServiceImpl implements ClassroomService {
     }
 
     @Override
-    public PageInfo<ClassroomEntity> getPageInfo(String keyword) {
-        // 1.调用PageHelper的静态方法开启分页功能
-        // 这里充分体现了PageHelper的"非侵入"式设计：原本要做的的查询不必有任何修改
-
-        // 2.执行查询
-        List<ClassroomEntity> classroomEntities = classroomMapper.selectClassroomByKeyword(keyword);
-//        System.out.println(admins);
-
-        // 3.封装到PageInfo
-        return new PageInfo<>(classroomEntities);
+    public List<ClassroomEntity> selectAllClassroom(String classroomName) {
+        List<ClassroomEntity> classroomEntities = classroomMapper.selectAllClassroom(classroomName);
+        return classroomEntities;
     }
 
 

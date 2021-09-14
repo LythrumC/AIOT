@@ -23,5 +23,6 @@ public interface ClassroomService {
      * 列表显示所有教室信息
      * @return
      */
-    public PageInfo<ClassroomEntity> getPageInfo(String keyword);
+    public List<ClassroomEntity> selectAllClassroom(String classroomName);
+
 }

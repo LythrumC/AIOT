@@ -20,10 +20,10 @@ public interface ClassroomMapper {
 
     /**
      * Dao接口，分页查询
-     * @param keyword
+     * @param
      * @return
      */
-    List<ClassroomEntity> selectClassroomByKeyword(String keyword);
+    List<ClassroomEntity> selectAllClassroom(String classroomName);
 
 
 }

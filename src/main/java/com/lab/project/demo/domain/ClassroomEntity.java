@@ -73,6 +73,5 @@ public class ClassroomEntity extends BaseEntity {
      */
     private String delFlag;
 
-    public ClassroomEntity() {
-    }
+    public ClassroomEntity() { }
 }

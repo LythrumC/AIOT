@@ -14,6 +14,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author 陈宽
@@ -44,5 +45,11 @@ public class ClassroomServiceTest {
                 "0");
         int i = classroomService.addClassroom(classroomEntity);
         System.out.println(i);
+    }
+
+    @Test
+    public void selectClassroom(){
+        List<ClassroomEntity> classroomEntities = classroomService.selectAllClassroom("AIOT");
+        System.out.println(classroomEntities);
     }
 }
