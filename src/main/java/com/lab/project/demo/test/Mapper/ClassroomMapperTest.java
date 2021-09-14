@@ -60,4 +60,28 @@ public class ClassroomMapperTest {
 
     }
 
+    @Test
+    public void selectClassroomById(){
+        ClassroomEntity classroomEntity = classroomMapper.selectClassroomById(new Long(1));
+        System.out.println(classroomEntity);
+    }
+
+    @Test
+    public void updateClassroom(){
+        ClassroomEntity classroomEntity = new ClassroomEntity(
+                new Long(1),
+                "AIOT_1",
+                "aiot实验室改",
+                50,
+                new Long(0),
+                null,
+                null,
+                null,
+                "雷阳",
+                new Long(1),
+                "0");
+        int i = classroomMapper.updateClassroom(classroomEntity);
+        System.out.println(i);
+    }
+
 }

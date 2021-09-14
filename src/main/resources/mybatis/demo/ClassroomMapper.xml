@@ -39,5 +39,31 @@
                 #{delFlag})
     </insert>
 
+    <select id="selectClassroomById" resultMap="ClassroomResult">
+        select id, classroom_name, content, classroom_num, sort_no, create_time, create_by, update_time, update_by, version, del_flag
+        from t_school_classroom
+        where id = #{id}
+    </select>
+
+    <update id="updateClassroom" parameterType="com.lab.project.demo.domain.ClassroomEntity">
+        update t_school_classroom
+        <set>
+            <if test="classroomName != null">classroom_name = #{classroomName},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="classroomNum != null">classroom_num = #{classroomNum},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="version != null">version = #{version},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            update_time = sysdate()
+        </set>
+            where id = #{id}
+    </update>
+
+    <delete id="deleteClassroom" parameterType="Long">
+        delete from t_school_classroom where id = #{id}
+    </delete>
+
 
 </mapper>

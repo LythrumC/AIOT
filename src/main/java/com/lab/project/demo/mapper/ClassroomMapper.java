@@ -26,4 +26,9 @@ public interface ClassroomMapper {
     List<ClassroomEntity> selectAllClassroom(String classroomName);
 
 
+    ClassroomEntity selectClassroomById(Long id);
+
+    int updateClassroom(ClassroomEntity classroomEntity);
+
+    int deleteClassroom(Long id);
 }

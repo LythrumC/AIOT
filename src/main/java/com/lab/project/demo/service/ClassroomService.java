@@ -13,6 +13,13 @@ import java.util.List;
 public interface ClassroomService {
 
     /**
+     *
+     * @param id 主键id
+     * @return 影响行数
+     */
+    public ClassroomEntity selectClassroomById(Long id);
+
+    /**
      * 
      * @param classroomEntity
      * @return
@@ -25,4 +32,7 @@ public interface ClassroomService {
      */
     public List<ClassroomEntity> selectAllClassroom(String classroomName);
 
+    int update(ClassroomEntity classroomEntity);
+
+    int removeClassroom(Long[] ids);
 }
