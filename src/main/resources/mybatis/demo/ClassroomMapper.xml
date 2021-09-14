@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lab.project.demo.mapper.ClassroomMapper">
+
+    <resultMap type="classroomEntity" id="ClassroomResult">
+        <id     property="id"      column="id"      />
+        <result property="classroomName" column="classroom_name"/>
+        <result property="content" column="content"/>
+        <result property="classroomNum" column="classroom_num"/>
+    </resultMap>
+
+
+    <select id="selectAllClassroom" resultMap="ClassroomResult">
+        select id, classroom_name, content, classroom_num, sort_no, create_time, create_by, update_time, update_by, version, del_flag
+        from t_school_classroom
+        where classroom_name like CONCAT("%",#{classroomName},"%")
+    </select>
+
+    <!-- 新增教室信息   -->
+    <insert id="addClassroom" parameterType="com.lab.project.demo.domain.ClassroomEntity">
+        insert into t_school_classroom (id,
+                                        classroom_name,
+                                        content,
+                                        classroom_num,
+                                        create_time,
+                                        create_by,
+                                        version,
+                                        del_flag)
+        values (#{id},
+                #{classroomName},
+                #{content},
+                #{classroomNum},
+                #{createTime},
+                #{createBy},
+                #{version},
+                #{delFlag})
+    </insert>
+
+
+</mapper>
