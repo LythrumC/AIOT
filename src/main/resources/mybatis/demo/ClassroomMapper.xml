@@ -44,7 +44,7 @@
         <if test="delFlag != null and delFlag != ''">del_flag,</if>
         create_time
         )values(
-        <if test="classroomName != null and classroomName != ''">#{configName},</if>
+        <if test="classroomName != null and classroomName != ''">#{classroomName},</if>
         <if test="content != null and content != ''">#{content},</if>
         <if test="classroomNum != null and classroomNum != ''">#{classroomNum},</if>
         <if test="sortNo != null and sortNo != ''">#{sortNo},</if>

@@ -2,6 +2,7 @@ package com.lab.project.demo.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.lab.common.utils.ParameterUtil;
 import com.lab.project.demo.domain.ClassroomEntity;
 import com.lab.project.demo.mapper.ClassroomMapper;
 import com.lab.project.demo.service.ClassroomService;
@@ -31,9 +32,7 @@ public class ClassroomServiceImpl implements ClassroomService {
      */
     @Override
     public int addClassroom(ClassroomEntity classroomEntity) {
-        classroomEntity.setCreateBy("student");
-        classroomEntity.setVersion(new Long(0));
-        classroomEntity.setDelFlag("0");
+        ParameterUtil.setCreateEntity(classroomEntity);
         int i = classroomMapper.addClassroom(classroomEntity);
         return i;
     }
