@@ -31,9 +31,6 @@ public class ClassroomServiceImpl implements ClassroomService {
      */
     @Override
     public int addClassroom(ClassroomEntity classroomEntity) {
-        Date date = new Date();
-        String format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(date);
-        classroomEntity.setCreateTime(date);
         classroomEntity.setCreateBy("student");
         classroomEntity.setVersion(new Long(0));
         classroomEntity.setDelFlag("0");
@@ -41,18 +38,33 @@ public class ClassroomServiceImpl implements ClassroomService {
         return i;
     }
 
+    /**
+     * 显示教室列表
+     * @param classroomName
+     * @return 教室列表
+     */
     @Override
     public List<ClassroomEntity> selectAllClassroom(String classroomName) {
         List<ClassroomEntity> classroomEntities = classroomMapper.selectAllClassroom(classroomName);
         return classroomEntities;
     }
 
+    /**
+     * 显示教室详细信息
+     * @param id 主键id
+     * @return
+     */
     @Override
     public ClassroomEntity selectClassroomById(Long id) {
         ClassroomEntity classroomEntity = classroomMapper.selectClassroomById(id);
         return classroomEntity;
     }
 
+    /**
+     * 更新教室信息
+     * @param classroomEntity
+     * @return
+     */
     @Override
     public int update(ClassroomEntity classroomEntity) {
         classroomEntity.setUpdateBy("student");
@@ -60,6 +72,11 @@ public class ClassroomServiceImpl implements ClassroomService {
         return i;
     }
 
+    /**
+     * 删除教室
+     * @param ids
+     * @return
+     */
     @Override
     public int removeClassroom(Long[] ids) {
         int i = 0;

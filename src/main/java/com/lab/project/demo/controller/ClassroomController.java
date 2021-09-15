@@ -53,7 +53,7 @@ public class ClassroomController extends BaseController {
         } else {
             classroomEntities = classroomService.selectAllClassroom("");
         }
-        System.out.println(classroomEntities);
+//        System.out.println(classroomEntities);
         return getDataTable(classroomEntities);
     }
 

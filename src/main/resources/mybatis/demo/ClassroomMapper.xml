@@ -12,39 +12,54 @@
         <result property="classroomNum" column="classroom_num"/>
     </resultMap>
 
-
-    <select id="selectAllClassroom" resultMap="ClassroomResult">
+    <sql id="selectClassroom">
         select id, classroom_name, content, classroom_num, sort_no, create_time, create_by, update_time, update_by, version, del_flag
         from t_school_classroom
+    </sql>
+
+    <!--查询所有教室信息-->
+    <select id="selectAllClassroom" resultMap="ClassroomResult">
+        <include refid="selectClassroom"/>
         where classroom_name like CONCAT("%",#{classroomName},"%")
+    </select>
+
+    <!--通过主键查询教室信息-->
+    <select id="selectClassroomById" resultMap="ClassroomResult">
+        <include refid="selectClassroom"/>
+        where id = #{id}
     </select>
 
     <!-- 新增教室信息   -->
     <insert id="addClassroom" parameterType="com.lab.project.demo.domain.ClassroomEntity">
-        insert into t_school_classroom (id,
-                                        classroom_name,
-                                        content,
-                                        classroom_num,
-                                        create_time,
-                                        create_by,
-                                        version,
-                                        del_flag)
-        values (#{id},
-                #{classroomName},
-                #{content},
-                #{classroomNum},
-                #{createTime},
-                #{createBy},
-                #{version},
-                #{delFlag})
+       insert into t_school_classroom (
+        <if test="classroomName != null and classroomName != '' ">classroom_name,</if>
+        <if test="content != null and content != '' ">content,</if>
+        <if test="classroomNum != null and classroomNum != '' ">classroom_num,</if>
+        <if test="sortNo != null and sortNo != '' ">sort_no,</if>
+        <if test="createTime != null and createTime != ''">create_time,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        <if test="updateTime != null and updateTime != ''">update_time,</if>
+        <if test="updateBy != null and updateBy != ''">update_by,</if>
+        <if test="version != null and version != ''">version,</if>
+        <if test="delFlag != null and delFlag != ''">del_flag,</if>
+        create_time
+        )values(
+        <if test="classroomName != null and classroomName != ''">#{configName},</if>
+        <if test="content != null and content != ''">#{content},</if>
+        <if test="classroomNum != null and classroomNum != ''">#{classroomNum},</if>
+        <if test="sortNo != null and sortNo != ''">#{sortNo},</if>
+        <if test="createTime != null and createTime != ''">#{createTime},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        <if test="updateTime != null and updateTime != ''">#{updateTime},</if>
+        <if test="updateBy != null and updateBy != ''">#{updateBy},</if>
+        <if test="version != null and version != ''">#{version},</if>
+        <if test="delFlag != null and delFlag != ''">#{delFlag},</if>
+        sysdate()
+        )
+
     </insert>
 
-    <select id="selectClassroomById" resultMap="ClassroomResult">
-        select id, classroom_name, content, classroom_num, sort_no, create_time, create_by, update_time, update_by, version, del_flag
-        from t_school_classroom
-        where id = #{id}
-    </select>
-
+    <!--更新教室信息-->
     <update id="updateClassroom" parameterType="com.lab.project.demo.domain.ClassroomEntity">
         update t_school_classroom
         <set>
@@ -61,9 +76,8 @@
             where id = #{id}
     </update>
 
+    <!--删除教室信息-->
     <delete id="deleteClassroom" parameterType="Long">
         delete from t_school_classroom where id = #{id}
     </delete>
-
-
 </mapper>
