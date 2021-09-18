@@ -20,7 +20,7 @@
     <!--查询所有教室信息-->
     <select id="selectAllClassroom" resultMap="ClassroomResult">
         <include refid="selectClassroom"/>
-        where classroom_name like CONCAT("%",#{classroomName},"%")
+        where classroom_name like CONCAT("%",#{classroomName},"%") AND del_flag = 0;
     </select>
 
     <!--通过主键查询教室信息-->
@@ -31,31 +31,24 @@
 
     <!-- 新增教室信息   -->
     <insert id="addClassroom" parameterType="com.lab.project.demo.domain.ClassroomEntity">
-       insert into t_school_classroom (
-        <if test="classroomName != null and classroomName != '' ">classroom_name,</if>
-        <if test="content != null and content != '' ">content,</if>
-        <if test="classroomNum != null and classroomNum != '' ">classroom_num,</if>
-        <if test="sortNo != null and sortNo != '' ">sort_no,</if>
-        <if test="createTime != null and createTime != ''">create_time,</if>
-        <if test="createBy != null and createBy != ''">create_by,</if>
-        <if test="updateTime != null and updateTime != ''">update_time,</if>
-        <if test="updateBy != null and updateBy != ''">update_by,</if>
-        <if test="version != null and version != ''">version,</if>
-        <if test="delFlag != null and delFlag != ''">del_flag,</if>
-        create_time
-        )values(
-        <if test="classroomName != null and classroomName != ''">#{classroomName},</if>
-        <if test="content != null and content != ''">#{content},</if>
-        <if test="classroomNum != null and classroomNum != ''">#{classroomNum},</if>
-        <if test="sortNo != null and sortNo != ''">#{sortNo},</if>
-        <if test="createTime != null and createTime != ''">#{createTime},</if>
-        <if test="createBy != null and createBy != ''">#{createBy},</if>
-        <if test="updateTime != null and updateTime != ''">#{updateTime},</if>
-        <if test="updateBy != null and updateBy != ''">#{updateBy},</if>
-        <if test="version != null and version != ''">#{version},</if>
-        <if test="delFlag != null and delFlag != ''">#{delFlag},</if>
-        sysdate()
-        )
+        insert into t_school_classroom (classroom_name,
+                                        content,
+                                        classroom_num,
+                                        create_time,
+                                        create_by,
+                                        update_time,
+                                        update_by,
+                                        version,
+                                        del_flag)
+        values (#{classroomName},
+                #{content},
+                #{classroomNum},
+                #{createTime},
+                #{createBy},
+                #{updateTime},
+                #{updateBy},
+                #{version},
+                #{delFlag})
 
     </insert>
 
@@ -66,18 +59,20 @@
             <if test="classroomName != null">classroom_name = #{classroomName},</if>
             <if test="content != null">content = #{content},</if>
             <if test="classroomNum != null">classroom_num = #{classroomNum},</if>
-            <if test="createTime != null">create_time = #{createTime},</if>
-            <if test="createBy != null">create_by = #{createBy},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
-            <if test="version != null">version = #{version},</if>
-            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="version != null">version = #{version} + 1,</if>
             update_time = sysdate()
         </set>
-            where id = #{id}
+            where id = #{id} AND version = #{version}
     </update>
 
     <!--删除教室信息-->
-    <delete id="deleteClassroom" parameterType="Long">
-        delete from t_school_classroom where id = #{id}
-    </delete>
+    <update id="deleteClassroom" parameterType="Long">
+        update t_school_classroom
+        <set>
+            del_flag = 2,
+            update_time = sysdate()
+        </set>
+            WHERE id = #{id}
+    </update>
 </mapper>

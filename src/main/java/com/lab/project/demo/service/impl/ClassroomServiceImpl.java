@@ -3,6 +3,7 @@ package com.lab.project.demo.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lab.common.utils.ParameterUtil;
+import com.lab.framework.web.domain.AjaxResult;
 import com.lab.project.demo.domain.ClassroomEntity;
 import com.lab.project.demo.mapper.ClassroomMapper;
 import com.lab.project.demo.service.ClassroomService;
@@ -65,10 +66,10 @@ public class ClassroomServiceImpl implements ClassroomService {
      * @return
      */
     @Override
-    public int update(ClassroomEntity classroomEntity) {
-        classroomEntity.setUpdateBy("student");
-        int i = classroomMapper.updateClassroom(classroomEntity);
-        return i;
+    public AjaxResult update(ClassroomEntity classroomEntity) {
+        ParameterUtil.setUpdateEntity(classroomEntity);
+        return classroomMapper.updateClassroom(classroomEntity) > 0 ?
+                AjaxResult.success() : AjaxResult.error("触发乐观锁，修改失败");
     }
 
     /**
@@ -77,13 +78,12 @@ public class ClassroomServiceImpl implements ClassroomService {
      * @return
      */
     @Override
-    public int removeClassroom(Long[] ids) {
+    public AjaxResult removeClassroom(Long[] ids) {
         int i = 0;
         for (Long id : ids) {
-            ClassroomEntity classroomEntity = classroomMapper.selectClassroomById(id);
-             i = classroomMapper.deleteClassroom(id) + i;
+            i = classroomMapper.deleteClassroom(id) + i;
         }
-        return i;
+        return i > 0 ? AjaxResult.success() : AjaxResult.error("删除失败");
     }
 
 

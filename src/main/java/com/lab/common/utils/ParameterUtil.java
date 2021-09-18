@@ -22,7 +22,7 @@ public class ParameterUtil {
      */
     public static Map<String, Object> getBatchUpdateMapByIds(Long[] ids) {
         // 初始化map
-        Map<String, Object> map = initMap();
+        Map<String, Object> map = initMap();   //user,nowdate
         // 设置id数组
         map.put("ids" , ids);
         // 返回map
@@ -44,7 +44,7 @@ public class ParameterUtil {
         t.setUpdateTime(date);
         // 设置创建人
         t.setCreateBy(operator);
-        // 设置更新人
+        // 设置更新人 
         t.setUpdateBy(operator);
         // 设置版本号
         t.setVersion(0L);
@@ -67,7 +67,7 @@ public class ParameterUtil {
         // 设置创建时间
         t.setCreateTime(date);
         // 设置创建人
-        t.setCreateBy(userName);
+        t.setCreateBy(userName);    
         // 设置更新时间
         t.setUpdateTime(date);
         // 设置更新人

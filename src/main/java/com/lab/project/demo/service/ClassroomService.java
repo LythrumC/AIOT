@@ -1,6 +1,7 @@
 package com.lab.project.demo.service;
 
 import com.github.pagehelper.PageInfo;
+import com.lab.framework.web.domain.AjaxResult;
 import com.lab.project.demo.domain.ClassroomEntity;
 
 import java.util.List;
@@ -32,7 +33,12 @@ public interface ClassroomService {
      */
     public List<ClassroomEntity> selectAllClassroom(String classroomName);
 
-    int update(ClassroomEntity classroomEntity);
+    /**
+     * 更新教室信息
+     * @param classroomEntity
+     * @return
+     */
+    AjaxResult update(ClassroomEntity classroomEntity);
 
-    int removeClassroom(Long[] ids);
+    AjaxResult removeClassroom(Long[] ids);
 }

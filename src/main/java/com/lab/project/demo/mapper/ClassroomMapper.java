@@ -28,6 +28,11 @@ public interface ClassroomMapper {
 
     ClassroomEntity selectClassroomById(Long id);
 
+    /**
+     * 更新教室信息
+     * @param classroomEntity
+     * @return
+     */
     int updateClassroom(ClassroomEntity classroomEntity);
 
     int deleteClassroom(Long id);

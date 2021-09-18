@@ -65,14 +65,12 @@ public class ClassroomController extends BaseController {
 
     @PutMapping("/edit")
     public AjaxResult editClassroom(@RequestBody ClassroomEntity classroomEntity){
-        int rows = classroomService.update(classroomEntity);
-        return toAjax(rows);
+        return classroomService.update(classroomEntity);
     }
 
     @DeleteMapping("/delete/{ids}" )
     public AjaxResult removeClassroom(@PathVariable Long[] ids){
-        int i = classroomService.removeClassroom(ids);
-        return AjaxResult.success();
+        return  classroomService.removeClassroom(ids);
     }
 
 
