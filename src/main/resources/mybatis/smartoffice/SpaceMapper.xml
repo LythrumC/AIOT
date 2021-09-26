@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--简单来说，每一个Dao都有一个mapper.xml文件来进行操作-->
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lab.project.smartoffice.common.space.mapper.SpaceMapper">
+
+    <!-- 新增空间信息   -->
+    <insert id="insertSpace" parameterType="com.lab.project.smartoffice.common.space.domain.SpaceEntity">
+        INSERT t_space(
+        space_type,
+        space_name,
+        space_position,
+        space_capacity,
+        space_is_enable,
+        space_pic_url,
+        sort_no,
+        create_time,
+        create_by,
+        update_time,
+        update_by,
+        version,
+        del_flag)
+        VALUE(
+        #{spaceType},
+        #{spaceName},
+        #{spacePosition},
+        #{spaceCapacity},
+        #{spaceIsEnable},
+        #{spacePicUrl},
+        #{sortNo},
+        #{createTime},
+        #{createBy},
+        #{updateTime},
+        #{updateBy},
+        #{version},
+        #{delFlag}
+        )
+    </insert>
+
+    <!--得到空间列表信息-->
+    <select id="getSpaceList" resultType="spaceEntity" >
+        select id,
+               version,
+               space_name,
+               space_position,
+               space_pic_url
+        FROM t_space
+        WHERE
+             space_type = #{spaceType} AND del_flag = '0'
+    </select>
+
+    <!--删除教室信息-->
+    <update id="removeSpace" parameterType="spaceEntity">
+        update t_space
+        <set>
+            update_time = #{updateTime},
+            update_by = #{updateBy},
+            del_flag = '2',
+            version = version + 1
+        </set>
+        WHERE
+            id = #{id}
+    </update>
+
+    <!--更新空间信息-->
+    <update id="updateSpace" parameterType="spaceEntity">
+        update t_space
+        <set>
+            space_name = #{spaceName},
+            space_position = #{spacePosition},
+            space_pic_url = #{spacePicUrl},
+            update_time = #{updateTime},
+            update_by = #{updateBy},
+            version = version + 1
+        </set>
+        WHERE
+        id = #{id}
+    </update>
+
+
+
+
+</mapper>

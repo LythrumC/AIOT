@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--简单来说，每一个Dao都有一个mapper.xml文件来进行操作-->
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lab.project.smartoffice.common.space.mapper.SpaceDeviceMapper">
+    <!--查出在指定Space中，-->
+    <select id="listWarningDevices" parameterType="java.lang.String" resultType="com.lab.project.smartoffice.common.device.domain.DeviceEntity">
+        SELECT
+            td.id,
+            td.device_name,
+            td.device_model,
+            td.device_type,
+            td.device_pic_url,
+            td.device_length,
+            td.device_width,
+            td.device_height,
+            td.device_is_enable
+        FROM
+            t_device AS td LEFT JOIN t_space_device AS tsd ON td.id = tsd.device_id
+            AND tsd.del_flag = '0'
+        WHERE
+            <!--tsd.id IS NULL 代表设备没有被使用-->
+            tsd.id IS NULL
+            AND td.del_flag = '0'
+            <if test="deviceType != '' and deviceType != null">
+                AND td.device_type = #{deviceType}
+            </if>
+    </select>
+
+    <!--
+    显示指定型号的警器
+    添加后为使用状态，不再显示
+    -->
+    <select id="listNoUse" parameterType="java.lang.String" resultType="com.lab.project.smartoffice.common.device.domain.DeviceEntity">
+        SELECT
+        td.id,
+        td.gateway_id,
+        td.create_time,
+        td.create_by,
+        td.update_time,
+        td.update_by,
+        td.version,
+        td.sort_no,
+        td.del_flag,
+        td.device_name,
+        td.device_model,
+        td.device_type,
+        td.device_pic_url,
+        td.device_length,
+        td.device_width,
+        td.device_height,
+        td.device_is_enable
+        FROM
+            t_device AS td
+                LEFT JOIN t_space_device AS tsd ON td.id = tsd.device_id
+                AND tsd.del_flag = '0'
+        WHERE
+            td.id NOT IN
+            (SELECT tsd.device_id FROM t_space_device AS tsd WHERE tsd.space_id IS NOT NULL)
+          <if test="deviceType == '' or deviceType == null">
+              AND td.device_type IN (10,20)
+          </if>
+        <if test="deviceType != '' AND deviceType != null">
+            AND td.device_type = #{deviceType}
+        </if>
+    </select>
+
+    <select id="list" parameterType="java.lang.Long" resultType="com.lab.project.smartoffice.common.device.domain.DeviceEntity">
+        SELECT
+            td.id,
+            td.gateway_id,
+            td.create_time,
+            td.create_by,
+            td.update_time,
+            td.update_by,
+            td.version,
+            td.sort_no,
+            td.del_flag,
+            td.device_name,
+            td.device_model,
+            td.device_type,
+            td.device_pic_url,
+            td.device_length,
+            td.device_width,
+            td.device_height,
+            td.device_is_enable
+        FROM
+            t_device AS td LEFT JOIN t_space_device AS tsd ON td.id = tsd.device_id
+                           Left JOIN t_space AS ts ON tsd.space_id = ts.id
+        WHERE
+            ts.id = #{id}
+    </select>
+
+
+
+
+</mapper>

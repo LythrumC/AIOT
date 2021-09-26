@@ -8,21 +8,13 @@ import com.lab.framework.web.domain.AjaxResult;
 import com.lab.framework.web.page.TableDataInfo;
 import com.lab.project.demo.domain.ClassroomEntity;
 import com.lab.project.demo.service.ClassroomService;
-import com.lab.project.monitor.domain.SysJob;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.xmlbeans.impl.xb.xsdschema.Public;
-import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.ObjectStreamClass;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
 
 /**
  * @author 陈宽
@@ -33,16 +25,18 @@ import java.util.Map;
 @RestController
 @RequestMapping("/demo/classroom" )
 @Slf4j
+@Api
 public class ClassroomController extends BaseController {
+
     @Autowired
     private ClassroomService classroomService;
 
     @PostMapping("/add")
+    @ApiOperation(value = "新增教室",notes = "学校教室新增")
     public AjaxResult addClassroom(@RequestBody ClassroomEntity classroomEntity){
         classroomService.addClassroom(classroomEntity);
         return AjaxResult.success("新增成功");
     }
-
 
     @GetMapping("/list")
     public TableDataInfo selectAllClassroom(String classroomName){
@@ -72,8 +66,5 @@ public class ClassroomController extends BaseController {
     public AjaxResult removeClassroom(@PathVariable Long[] ids){
         return  classroomService.removeClassroom(ids);
     }
-
-
-
 
 }
