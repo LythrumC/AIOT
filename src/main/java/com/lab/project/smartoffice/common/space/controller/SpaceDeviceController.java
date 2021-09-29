@@ -4,11 +4,12 @@ import com.lab.framework.web.controller.BaseController;
 import com.lab.framework.web.domain.AjaxResult;
 import com.lab.framework.web.page.TableDataInfo;
 import com.lab.project.smartoffice.common.device.domain.DeviceEntity;
+import com.lab.project.smartoffice.common.space.domain.dto.DeviceDto;
+import com.lab.project.smartoffice.common.space.domain.dto.SpaceDeviceDto;
 import com.lab.project.smartoffice.common.space.service.ISpaceDeviceService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 /**
  * @author 陈宽
@@ -39,8 +40,8 @@ public class SpaceDeviceController extends BaseController {
      * @return
      */
     @GetMapping("/listNoUse")
-    public AjaxResult listNoUse(String deviceType){
-        return AjaxResult.success(spaceDeviceService.listNoUse(deviceType));
+    public AjaxResult listNoUse(String deviceType, String deviceName){
+        return AjaxResult.success(spaceDeviceService.listNoUse(deviceType,deviceName));
     }
 
     /**
@@ -52,4 +53,16 @@ public class SpaceDeviceController extends BaseController {
     public AjaxResult list(Long spaceId){
         return AjaxResult.success(spaceDeviceService.list(spaceId));
     }
+
+    /**
+     * 给当前Space空间添加设备
+     * @param spaceDeviceDto
+     * @return
+     */
+    @PostMapping("/add")
+    public AjaxResult addSpaceDevice(@RequestBody SpaceDeviceDto spaceDeviceDto){
+        spaceDeviceService.addSpaceDevice(spaceDeviceDto);
+        return AjaxResult.success("添加成功");
+    }
+
 }

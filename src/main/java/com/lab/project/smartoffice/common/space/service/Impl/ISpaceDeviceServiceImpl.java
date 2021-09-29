@@ -1,12 +1,18 @@
 package com.lab.project.smartoffice.common.space.service.Impl;
 
+import com.lab.common.utils.ParameterUtil;
 import com.lab.framework.web.domain.AjaxResult;
 import com.lab.project.smartoffice.common.device.domain.DeviceEntity;
+import com.lab.project.smartoffice.common.space.domain.SpaceDeviceEntity;
+import com.lab.project.smartoffice.common.space.domain.dto.SpaceDeviceDto;
 import com.lab.project.smartoffice.common.space.mapper.SpaceDeviceMapper;
 import com.lab.project.smartoffice.common.space.service.ISpaceDeviceService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
+import javax.swing.*;
 import java.util.List;
 
 /**
@@ -36,8 +42,8 @@ public class ISpaceDeviceServiceImpl implements ISpaceDeviceService {
      * @return
      */
     @Override
-    public List<DeviceEntity> listNoUse(String deviceType) {
-        List<DeviceEntity> deviceEntities = spaceDeviceMapper.listNoUse(deviceType);
+    public List<DeviceEntity> listNoUse(String deviceType, String deviceName) {
+        List<DeviceEntity> deviceEntities = spaceDeviceMapper.listNoUse(deviceType,deviceName);
         return deviceEntities;
     }
 
@@ -47,18 +53,44 @@ public class ISpaceDeviceServiceImpl implements ISpaceDeviceService {
      * @return
      */
     @Override
-    public List<DeviceEntity> list(Long id) {
-        List<DeviceEntity> list = spaceDeviceMapper.list(id);
+    public List<SpaceDeviceEntity> list(Long id) {
+        List<SpaceDeviceEntity> list = spaceDeviceMapper.list(id);
         return list;
     }
 
     /**
-     * 给当前spcae空间添加告警器
-     * @param spaceId
+     * 给当前空间Space添加设备
+     * @param spaceDeviceDto
      * @return
      */
     @Override
-    public Integer addSpaceDevice(DeviceEntity deviceEntity) {
-        return null;
+    @Transactional(rollbackFor = Exception.class)
+    public AjaxResult addSpaceDevice(SpaceDeviceDto spaceDeviceDto) {
+        // 1.释放使用的设备
+        Long spaceId = spaceDeviceDto.getSpaceId();
+        List<SpaceDeviceEntity> spaceDeviceList = spaceDeviceDto.getSpaceDeviceList();
+        List<SpaceDeviceEntity> list = spaceDeviceMapper.list(spaceId);
+        if (list.size() > 0){ spaceDeviceMapper.removeSpaceDevice(spaceId); }
+
+        // 2.判断设备是否被使用
+        Integer results = spaceDeviceMapper.noUseDeviceInSpace(spaceDeviceList);
+
+        // 3.新增设备
+            if (results == 0){
+                if (spaceDeviceList != null && spaceDeviceList.size() > 0){
+                    // 设置基础属性
+                    for (SpaceDeviceEntity spaceDeviceEntity : spaceDeviceList) { ParameterUtil.setCreateEntity(spaceDeviceEntity); }
+                    // 添加设备
+                    spaceDeviceMapper.addSpaceDevice(spaceDeviceList);
+                } else { AjaxResult.error("请选择要添加的设备"); }
+            } else {
+                // 设备被占用，手动回滚
+                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+                return AjaxResult.error("该设备被占用,无法添加");
+            }
+        return AjaxResult.success("添加成功");
     }
+
+
+
 }

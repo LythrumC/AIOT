@@ -23,6 +23,11 @@ public class DeviceEntity extends BaseEntity {
     private String id;
 
     /**
+     * 和主键存储的信息一样
+     */
+    private String deviceId;
+
+    /**
      * 网关id
      */
     private String gatewayId;

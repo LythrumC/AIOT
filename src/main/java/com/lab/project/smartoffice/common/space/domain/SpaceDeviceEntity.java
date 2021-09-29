@@ -39,7 +39,7 @@ public class SpaceDeviceEntity extends BaseEntity {
     /**
      * 设备坐标
      */
-    private String deivcePosition;
+    private String devicePosition;
 
     /**
      * X轴坐标
@@ -54,7 +54,7 @@ public class SpaceDeviceEntity extends BaseEntity {
     /**
      * Z轴坐标
      */
-    private String deivcePositionZ;
+    private String devicePositionZ;
 
     /**
      * 序号
@@ -92,4 +92,5 @@ public class SpaceDeviceEntity extends BaseEntity {
     private String delFlag;
 
     public SpaceDeviceEntity() { }
+
 }

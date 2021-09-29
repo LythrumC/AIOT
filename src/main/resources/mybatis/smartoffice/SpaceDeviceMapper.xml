@@ -5,18 +5,27 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.lab.project.smartoffice.common.space.mapper.SpaceDeviceMapper">
+
     <!--查出在指定Space中，-->
     <select id="listWarningDevices" parameterType="java.lang.String" resultType="com.lab.project.smartoffice.common.device.domain.DeviceEntity">
         SELECT
-            td.id,
-            td.device_name,
-            td.device_model,
-            td.device_type,
-            td.device_pic_url,
-            td.device_length,
-            td.device_width,
-            td.device_height,
-            td.device_is_enable
+        td.id,
+        td.gateway_id,
+        td.create_time,
+        td.create_by,
+        td.update_time,
+        td.update_by,
+        td.version,
+        td.sort_no,
+        td.del_flag,
+        td.device_name,
+        td.device_model,
+        td.device_type,
+        td.device_pic_url,
+        td.device_length,
+        td.device_width,
+        td.device_height,
+        td.device_is_enable
         FROM
             t_device AS td LEFT JOIN t_space_device AS tsd ON td.id = tsd.device_id
             AND tsd.del_flag = '0'
@@ -36,6 +45,7 @@
     <select id="listNoUse" parameterType="java.lang.String" resultType="com.lab.project.smartoffice.common.device.domain.DeviceEntity">
         SELECT
         td.id,
+        tsd.device_id,
         td.gateway_id,
         td.create_time,
         td.create_by,
@@ -58,39 +68,95 @@
                 AND tsd.del_flag = '0'
         WHERE
             td.id NOT IN
-            (SELECT tsd.device_id FROM t_space_device AS tsd WHERE tsd.space_id IS NOT NULL)
+            (SELECT tsd.device_id FROM t_space_device AS tsd WHERE tsd.space_id IS NOT NULL AND tsd.del_flag = '0')
+           AND td.del_flag = '0'
+          <if test="deviceName != '' and deviceName != null">
+              AND td.deviceName = #{deviceName}
+          </if>
+          <if test="deviceType != '' and deviceType != null">
+              AND td.device_type = #{deviceType}
+          </if>
           <if test="deviceType == '' or deviceType == null">
               AND td.device_type IN (10,20)
           </if>
-        <if test="deviceType != '' AND deviceType != null">
-            AND td.device_type = #{deviceType}
-        </if>
+
     </select>
 
-    <select id="list" parameterType="java.lang.Long" resultType="com.lab.project.smartoffice.common.device.domain.DeviceEntity">
+    <select id="list" parameterType="java.lang.Long" resultType="com.lab.project.smartoffice.common.space.domain.vo.SpaceDeviceVO">
         SELECT
-            td.id,
-            td.gateway_id,
-            td.create_time,
-            td.create_by,
-            td.update_time,
-            td.update_by,
-            td.version,
-            td.sort_no,
-            td.del_flag,
+            tsd.space_id,
+            tsd.device_id,
+            tsd.device_position,
+            tsd.device_position_x,
+            tsd.device_position_y,
+            tsd.device_position_z,
             td.device_name,
-            td.device_model,
             td.device_type,
-            td.device_pic_url,
-            td.device_length,
-            td.device_width,
-            td.device_height,
-            td.device_is_enable
+            td.device_pic_url
         FROM
-            t_device AS td LEFT JOIN t_space_device AS tsd ON td.id = tsd.device_id
-                           Left JOIN t_space AS ts ON tsd.space_id = ts.id
+            t_space_device AS tsd LEFT JOIN t_device AS td ON tsd.device_id = td.id AND tsd.del_flag = '0'
         WHERE
-            ts.id = #{id}
+            td.del_flag = '0'
+          <if test="id != null">
+              AND tsd.space_id = #{id}
+          </if>
+    </select>
+
+    <insert id="addSpaceDevice" parameterType="com.lab.project.smartoffice.common.space.domain.SpaceDeviceEntity">
+        INSERT
+        t_space_device(
+        space_id,
+        device_id,
+        device_position,
+        device_position_x,
+        device_position_y,
+        device_position_z,
+        sort_no,
+        create_time,
+        create_by,
+        version,
+        del_flag)
+        VALUES
+        <!--insert 的foreach 不能加 open 和 close-->
+        <foreach collection="spaceDeviceEntityList" item="item" separator="," index="index">
+          (
+            #{item.spaceId},
+            #{item.deviceId},
+            #{item.devicePosition},
+            #{item.devicePositionX},
+            #{item.devicePositionY},
+            #{item.devicePositionZ},
+            #{item.sortNo},
+            #{item.createTime},
+            #{item.createBy},
+            #{item.version},
+            #{item.delFlag}
+          )
+        </foreach>
+    </insert>
+
+    <!--释放当前空间的设备-->
+    <update id="removeSpaceDevice">
+        update t_space_device AS tsd
+        <set>
+            tsd.del_flag = '2',
+            tsd.version = tsd.version + 1,
+            tsd.update_time = sysdate()
+        </set>
+        WHERE
+            tsd.space_id = #{spaceId}
+
+    </update>
+
+    <select id="noUseDeviceInSpace" resultType="java.lang.Integer" parameterType="java.util.List">
+        SELECT
+              COUNT(tsd.id)
+        FROM t_space_device AS tsd
+        WHERE tsd.del_flag = '0'
+            AND tsd.device_id IN
+            <foreach collection="spaceDeviceEntityList" item="item" open="(" close=")" separator=",">
+                #{item.deviceId}
+            </foreach>
     </select>
 
 
