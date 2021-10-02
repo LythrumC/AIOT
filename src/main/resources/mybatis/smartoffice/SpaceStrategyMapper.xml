@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--简单来说，每一个Dao都有一个mapper.xml文件来进行操作-->
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lab.project.smartoffice.common.space.mapper.SpaceStrategyMapper">
+
+    <select id="listSpaceStrategy" parameterType="java.lang.Long" resultType="com.lab.project.smartoffice.common.space.domain.SpaceStrategyEntity">
+        SELECT
+        tss.id,
+        tss.space_id,
+        tss.strategy_name,
+        tss.strategy_is_enable,
+        tss.device_function_type,
+        tss.strategy_data,
+        tss.strategy_data_smaller_than,
+        tss.strategy_data_bigger_than
+        FROM
+        t_space_strategy AS tss
+        WHERE
+        tss.del_flag = '0'
+        <if test="spaceId != null">
+            AND tss.space_id = #{spaceId}
+        </if>
+    </select>
+
+    <update id="removeSpaceDevice" >
+        update t_space_strategy AS tss
+        <set>
+            tss.del_flag = '2',
+            tss.version = tss.version + 1,
+            tss.update_time = sysdate()
+        </set>
+        WHERE
+        tss.space_id = #{spaceId}
+
+    </update>
+
+    <insert id="addSpaceStrategy" parameterType="com.lab.project.smartoffice.common.space.domain.SpaceStrategyEntity" >
+        INSERT
+        t_space_strategy(
+        space_id,
+        strategy_name,
+        strategy_is_enable,
+        device_function_type,
+        strategy_data,
+        strategy_data_smaller_than,
+        strategy_data_bigger_than,
+        sort_no,
+        create_time,
+        create_by,
+        version,
+        del_flag
+       )
+        VALUES
+        <!--insert 的foreach 不能加 open 和 close-->
+        <foreach collection="strategyEntityList" item="item" separator="," index="index">
+            (
+            #{item.spaceId},
+            #{item.strategyName},
+            #{item.strategyIsEnable},
+            #{item.deviceFunctionType},
+            #{item.strategyData},
+            #{item.strategyDataSmallerThan},
+            #{item.strategyDataBiggerThan},
+            #{item.sortNo},
+            #{item.createTime},
+            #{item.createBy},
+            #{item.version},
+            #{item.delFlag}
+            )
+        </foreach>
+    </insert>
+
+
+
+
+
+</mapper>
