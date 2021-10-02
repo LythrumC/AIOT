@@ -23,6 +23,7 @@ public class SpaceStrategyController extends BaseController {
     @GetMapping("/list")
     public AjaxResult listSpaceStrategy(Long spaceId){
         return AjaxResult.success(iSpaceStrategyService.listSpaceStrategy(spaceId));
+        // 有点问题
 //        return AjaxResult.success(new ArrayList<>());
     }
 
