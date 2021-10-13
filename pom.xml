@@ -243,11 +243,12 @@
         </dependency>
 
         <!--添加调用设备的SDK-->
-<!--        <dependency>-->
-<!--            <groupId>com.neusiri</groupId>-->
-<!--            <artifactId>ai-sdk-spring-boot-starter</artifactId>-->
-<!--            <version>1.1-SNAPSHOT</version>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>com.neusiri</groupId>
+            <artifactId>ai-sdk-spring-boot-starter</artifactId>
+            <version>1.1-SNAPSHOT</version>
+        </dependency>
+
         <!-- 定时任务 -->
         <dependency>
             <groupId>org.quartz-scheduler</groupId>

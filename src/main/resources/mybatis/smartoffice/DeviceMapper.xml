@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--简单来说，每一个Dao都有一个mapper.xml文件来进行操作-->
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lab.project.smartoffice.common.device.mapper.DeviceMapper">
+    <select id="getDeviceMap" resultType="DeviceBO">
+        SELECT
+            id AS deviceId,
+            device_name,
+            device_model,
+            device_type,
+            device_pic_url,
+            device_length,
+            device_width,
+            device_height
+        FROM
+            t_device
+        WHERE
+            del_flag = '0'
+    </select>
+
+
+</mapper>

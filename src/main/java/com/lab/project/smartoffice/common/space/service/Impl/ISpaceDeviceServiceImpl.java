@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
+import javax.annotation.Resource;
 import javax.swing.*;
 import java.util.List;
 
@@ -24,6 +25,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ISpaceDeviceServiceImpl implements ISpaceDeviceService {
 
+    @Resource
     private SpaceDeviceMapper spaceDeviceMapper;
     /**
      * 查询所有声光报警器

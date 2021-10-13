@@ -79,6 +79,28 @@
         id = #{id}
     </update>
 
+    <select id="getSpaceDeviceMap" resultType="spaceDeviceBO">
+        SELECT
+            ts.space_name,
+            ts.space_type,
+            ts.space_position,
+            ts.space_capacity,
+            ts.space_pic_url,
+            tsd.device_id,
+            tsd.space_id,
+            tsd.device_position_x,
+            tsd.device_position_y,
+            tsd.device_position_z,
+            tsd.device_position,
+               (CASE ts.space_type WHEN 10 Then '机房' WHEN 12 THEN '会议室' ELSE '环境点' END) AS space_type_name
+            FROM
+               t_space_device AS tsd
+               LEFT JOIN t_space ts ON tsd.del_flag = '0'
+               AND tsd.space_id = ts.id
+            WHERE
+               tsd.del_flag = '0'
+    </select>
+
 
 
 
