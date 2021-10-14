@@ -2,6 +2,7 @@ package com.lab.project.smartoffice.common.space.mapper;
 
 import com.lab.project.smartoffice.common.space.domain.bo.SpaceDeviceBO;
 import com.lab.project.smartoffice.common.space.domain.SpaceEntity;
+import com.lab.project.smartoffice.common.space.domain.bo.SpaceStrategyBO;
 import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Param;
 
@@ -40,4 +41,5 @@ public interface SpaceMapper {
 
     @MapKey("deviceId")
     Map<String, SpaceDeviceBO> getSpaceDeviceMap();
+
 }

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--简单来说，每一个Dao都有一个mapper.xml文件来进行操作-->
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lab.project.smartoffice.common.datacollection.mapper.DataCollectionMapper">
+    <insert id="insertBatch" parameterType="DataCollectionEntity" useGeneratedKeys="true" keyProperty="id">
+        insert into
+        (
+        space_id,
+        space_type,
+        space_name,
+        space_position,
+        space_capacity,
+        space_pic_url,
+        space_type_name,
+        device_type_name,
+        device_type_function_name,
+        gateway_id,
+        gateway_name,
+        gateway_model,
+        device_id,
+        device_name,
+        device_model,
+        device_type,
+        device_position,
+        device_position_x,
+        device_position_y,
+        device_position_z,
+        device_length,
+        device_width,
+        device_height,
+        strategy_id,
+        strategy_name,
+        strategy_is_enable,
+        strategy_data,
+        strategy_data_smaller_than,
+        strategy_data_bigger_than,
+        device_function_type,
+        device_function_data,
+        sort_no,
+        create_time,
+        create_by,
+        version,
+        del_flag
+        ) values
+        <foreach collection="dataCollectionEntityList" item="item" index="index" separator=",">
+            (
+            #{item.spaceId},
+            #{item.spaceType},
+            #{item.spaceName},
+            #{item.spacePosition},
+            #{item.spaceCapacity},
+            #{item.spacePicUrl},
+            #{item.spaceTypeName},
+            #{item.deviceTypeName},
+            #{item.deviceFunctionTypeName},
+            #{item.gatewayId},
+            #{item.gatewayName},
+            #{item.gatewayModel}
+            #{item.deviceId},
+            #{item.deviceName},
+            #{item.deviceModel},
+            #{item.deviceType},
+            #{item.device_position},
+            #{item.device_position_x},
+            #{item.device_position_y},
+            #{item.device_position_z}
+            #{item.device_length},
+            #{item.device_width},
+            #{item.device_height},
+            #{item.strategy_id},
+            #{item.strategy_name},
+            #{item.strategy_is_enable},
+            #{item.strategy_data},
+            #{item.strategy_data_smaller_than},
+            #{item.strategy_data_bigger_than},
+            #{item. device_function_type},
+            #{item. device_function_data},
+            #{item.sortNo},
+            #{item.createTime},
+            #{item.createBy},
+            #{item.version},
+            #{item.delFlag}
+            )
+        </foreach>
+    </insert>
+
+
+
+</mapper>

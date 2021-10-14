@@ -1,6 +1,8 @@
 package com.lab.project.smartoffice.common.device.mapper;
 
 import com.lab.project.smartoffice.common.device.domain.bo.DeviceBO;
+import com.lab.project.smartoffice.common.device.domain.bo.DeviceFunctionBO;
+import com.lab.project.smartoffice.common.sdkcallback.domain.bo.GatewayBO;
 import org.apache.ibatis.annotations.MapKey;
 
 import java.util.Map;
@@ -17,4 +19,10 @@ public interface DeviceMapper {
      */
     @MapKey("deviceId")
     Map<String, DeviceBO> getDeviceMap();
+
+    @MapKey("deviceFunctionType")
+    Map<String, DeviceFunctionBO> getDeviceFunctionMap();
+
+    @MapKey("gatewayId")
+    Map<String, GatewayBO> getGatewayMap();
 }

@@ -73,6 +73,24 @@
         </foreach>
     </insert>
 
+    <select id="getSpaceStrategyMap" resultType="spaceStrategyBO">
+        SELECT
+            concat(ts.id,'@',tss.device_function_type) AS spaceUnionStrategy,
+            tss.id AS strategyId,
+            tss.strategy_name,
+            tss.strategy_data,
+            tss.strategy_data_bigger_than,
+            tss.strategy_data_smaller_than,
+            tss.device_function_type,
+            tss.strategy_is_enable
+        FROM
+            t_space_strategy AS tss
+                LEFT JOIN t_space AS ts ON tss.space_id = ts.id
+        WHERE
+            tss.del_flag = '0'
+          AND ts.id IS NOT NULL
+    </select>
+
 
 
 

@@ -1,10 +1,13 @@
 package com.lab.project.smartoffice.common.sdkcallback.domain;
 
+import lombok.Data;
+
 /**
  * @author 陈宽
  * @create 2021-10-11 11:32
  * @description
  */
+@Data
 public class DeviceFunctionDTO {
     /**
      * 对应功能回传数值

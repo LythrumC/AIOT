@@ -3,13 +3,15 @@ package com.lab.project.smartoffice.common.space.domain.bo;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * @author 陈宽
  * @create 2021-10-13 11:18
  * @description
  */
 @Data
-public class SpaceDeviceBO {
+public class SpaceDeviceBO implements Serializable {
 
     /**
      * 序列化id

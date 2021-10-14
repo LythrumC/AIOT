@@ -21,5 +21,26 @@
             del_flag = '0'
     </select>
 
+    <select id="getDeviceFunctionMap" resultType="deviceFunctionBO">
+        SELECT
+            device_function_type,
+            device_function_name as deviceFunctionTypeName
+        FROM
+            t_device_function
+        WHERE
+            del_flag = '0'
+    </select>
+
+    <select id="getGatewayMap" resultType="GatewayBO">
+        SELECT
+            id as gatewayId,
+            gateway_name,
+            gateway_model
+        FROM
+            t_gateway
+        WHERE
+            del_flag = '0'
+    </select>
+
 
 </mapper>
