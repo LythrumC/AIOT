@@ -12,6 +12,7 @@ import com.lab.project.smartoffice.common.sdkcallback.domain.DataCollectionEntit
 import com.lab.project.smartoffice.common.sdkcallback.domain.DeviceFunctionDTO;
 import com.lab.project.smartoffice.common.device.domain.bo.DeviceFunctionBO;
 import com.lab.project.smartoffice.common.sdkcallback.domain.bo.GatewayBO;
+import com.lab.project.smartoffice.common.sdkcallback.handle.DeviceFunctionHandlerContext;
 import com.lab.project.smartoffice.common.space.domain.bo.SpaceDeviceBO;
 import com.lab.project.smartoffice.common.space.domain.bo.SpaceStrategyBO;
 import com.lab.project.smartoffice.common.space.mapper.SpaceMapper;
@@ -44,6 +45,8 @@ public class DataHandlerService {
     private RedisCache redisCache;
 
     private DataCollectionMapper dataCollectionMapper;
+
+    private DeviceFunctionHandlerContext deviceFunctionHandlerContext;
 
 
     /**
@@ -93,7 +96,10 @@ public class DataHandlerService {
                 // 3.属性拷贝，把SpaceStrategyBO中的属性拷贝到dataCollection中
                 //   3.1 拼接Key
                 String spaceUnionStrategy = spaceDeviceBO.getSpaceId() + "@" + deviceFunctionDTO.getDeviceFunctionType();
-                spaceStrategyBOMap.get(spaceUnionStrategy);
+                SpaceStrategyBO spaceStrategyBO = spaceStrategyBOMap.get(spaceUnionStrategy);
+                if (spaceStrategyBO == null){
+                    continue;
+                }
                 //   3.2 属性拷贝
                 BeanUtils.copyProperties(spaceStrategyBOMap,dataCollectionEntity);
                 // 4.属性拷贝，把deviceFunctionBO中的属性拷贝到dataCollection中
@@ -115,12 +121,20 @@ public class DataHandlerService {
                 dataCollectionEntityList.add(dataCollectionEntity);
             }
         }
+        dataCollectionEntityList.forEach(System.out::println);
         // 批量插入到数据库
-        dataCollectionMapper.insertBatch(dataCollectionEntityList);
+        if(dataCollectionEntityList.size() > 0){
+            dataCollectionMapper.insertBatch(dataCollectionEntityList);
+        }
+        log.info("入库完成插入数据数量：{}",dataCollectionEntityList.size());
+        // 处理并判断是否需要警告
+        for (DataCollectionEntity dataCollectionEntity : dataCollectionEntityList) {
+            // 发异步送警告信息
+            deviceFunctionHandlerContext.getHandlerInstance(String.valueOf(dataCollectionEntity
+                    .getDeviceFunctionType()))
+                    .saveWarining(dataCollectionEntity);
 
-
-
-
+        }
     }
 
     private Map<String, GatewayBO> initGateWayRedis() {
