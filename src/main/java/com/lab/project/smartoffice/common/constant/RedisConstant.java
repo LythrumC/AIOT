@@ -27,4 +27,7 @@ public class RedisConstant {
     public static final String DEVICE_FUNCTION_CACHE_REDIS = "DeviceFunctionRedis";
 
     public static final String GATEWAY_CACHE_REDIS = "GatewayRedis";
+
+    public static final String SPACE_INCLUDE_DEVICE_CACHE = "spaceIncludeDeviceCache";
+
 }

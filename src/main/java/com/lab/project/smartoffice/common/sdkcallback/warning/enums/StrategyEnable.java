@@ -7,7 +7,9 @@ package com.lab.project.smartoffice.common.sdkcallback.warning.enums;
  */
 public enum StrategyEnable {
 
-    STRATEGY_ENABLE_OFF("0", "策略已关闭");
+    STRATEGY_ENABLE_OFF("0", "策略已关闭"), STRATEGY_ENABLE_ON("1", "策略已开启闭");
+
+
 
     /**
      * 是否开启策略描述

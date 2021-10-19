@@ -101,7 +101,19 @@
                tsd.del_flag = '0'
     </select>
 
-
+    <select id="getSpaceIncludeDevice" resultType="DeviceSpaceBO">
+        SELECT
+            tsd.space_id,
+               tsd.device_id,
+               td.device_type
+        FROM
+            t_space_device AS tsd
+        LEFT JOIN t_device AS td ON tsd.device_id = td.id
+        AND td.del_flag = '0'
+        WHERE
+            tsd.del_flag = '0'
+        AND td.device_type = 60
+    </select>
 
 
 </mapper>

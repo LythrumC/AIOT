@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--简单来说，每一个Dao都有一个mapper.xml文件来进行操作-->
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lab.project.smartoffice.common.sdkcallback.warning.mapper.DataWarningMapper">
+    <!--插入操作-->
+    <insert id="saveDataWarning" parameterType="DataWarning" useGeneratedKeys="true" keyProperty="id">
+
+
+
+    </insert>
+
+
+</mapper>
