@@ -59,6 +59,7 @@ public class WarningSaveListener {
                 deviceSpaceBO.getDeviceId(),
                 KaConstant.CONTROL_ALERTOR_STATE_ON,
                 KaConstant.PORT);
+
     }
 
 
