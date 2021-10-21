@@ -1,6 +1,9 @@
 package com.lab.project.smartoffice.common.sdkcallback.warning.mapper;
 
 import com.lab.project.smartoffice.common.sdkcallback.warning.domain.DataWarning;
+import com.lab.project.smartoffice.common.sdkcallback.warning.domain.dto.DataWarningDTO;
+
+import java.util.List;
 
 /**
  * @author 陈宽
@@ -13,4 +16,8 @@ public interface DataWarningMapper {
      * @param dataWarning
      */
     void saveDataWarning(DataWarning dataWarning);
+
+    List<DataWarning> selectDataWarning(DataWarningDTO dataWarningDTO);
+
+    int editDataWarning(DataWarningDTO dataWarningDTO);
 }

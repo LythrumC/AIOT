@@ -6,11 +6,129 @@
 
 <mapper namespace="com.lab.project.smartoffice.common.sdkcallback.warning.mapper.DataWarningMapper">
     <!--插入操作-->
-    <insert id="saveDataWarning" parameterType="DataWarning" useGeneratedKeys="true" keyProperty="id">
-
-
-
+    <insert id="saveDataWarning" parameterType="DataWarningDTO" useGeneratedKeys="true" keyProperty="id">
+        insert into t_data_warning(
+            data_collection_id,
+            data_warning_type,
+            processing_status,
+            space_id,
+            space_type,
+            space_name,
+            space_position,
+            space_capacity,
+            space_pic_url,
+            gateway_id,
+            gateway_name,
+            gateway_model,
+            device_id,
+            device_name,
+            device_model,
+            device_type,
+            space_type_name,
+            device_type_name,
+            device_function_type_name,
+            data_warning_type_name,
+            device_position,
+            device_position_x,
+            device_position_y,
+            device_position_z,
+            device_pic_url,
+            device_length,
+            device_width,
+            device_height,
+            strategy_id,
+            strategy_name,
+            strategy_is_enable,
+            strategy_data,
+            strategy_data_smaller_than,
+            strategy_data_bigger_than,
+            device_function_type,
+            device_function_data,
+            sort_no,
+            create_time,
+            create_by,
+            update_time,
+            update_by,
+            version,
+            del_flag
+        ) values
+            (
+             #{dataCollectionId},
+             #{dataWarningType},
+             #{processingStatus},
+             #{spaceId}
+             #{spaceType},
+             #{spaceName},
+             #{spacePosition},
+             #{spaceCapacity},
+             #{spacePicUrl},
+             #{gatewayId},
+             #{gatewayName},
+             #{gatewayModel},
+             #{deviceId},
+             #{deviceName},
+             #{deviceModel},
+             #{deviceType},
+             #{spaceTypeName},
+             #{deviceTypeName},
+             #{deviceFunctionTypeName},
+             #{dataWarningTypeName},
+             #{devicePosition},
+             #{devicePositionX},
+             #{devicePositionY},
+             #{devicePositionZ},
+             #{devicePicUrl},
+             #{deviceLength},
+             #{deviceWidth},
+             #{deviceHeight},
+             #{strategyId},
+             #{strategyName},
+             #{strategyIsEnable},
+             #{strategyData}，
+             #{strategyDataSmallerThan},
+             #{strategyDataBiggerThan},
+             #{deviceFunctionType},
+             #{deviceFunctionData},
+             #{sortNo},
+             #{createTime},
+             #{createBy},
+             #{updateTime},
+             #{updateBy},
+             #{version},
+             #{delFlag}
+            )
     </insert>
 
+    <update id="editDataWarning">
+        Update t_data_warning
+        SET update_time = #{updateTime},
+            update_by = #{updateBy},
+            processing_status = 1,
+            version = version + 1
+        WHERE
+            processing_status = 0
+        AND id IN
+            <foreach collection="ids" item="id" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+    </update>
 
+    <select id="selectDataWarning" parameterType="DataWarningDTO" resultType="com.lab.project.smartoffice.common.sdkcallback.warning.domain.DataWarning">
+        SELECT *
+        FROM t_data_warning
+        WHERE
+             del_flag = '0'
+        <if test="spaceId != null">
+            AND  space_id = #{spaceId}
+        </if>
+        <if test="processStatus != null">
+            AND  process_status = #{processStatus}
+        </if>
+        <if test="ids != null">
+            AND id IN
+            <foreach collection="ids" item="id" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </if>
+    </select>
 </mapper>

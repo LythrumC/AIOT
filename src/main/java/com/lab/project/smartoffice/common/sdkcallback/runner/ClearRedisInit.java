@@ -32,6 +32,9 @@ public class ClearRedisInit implements ApplicationRunner {
         redisCache.deleteObject(RedisConstant.SPACE_STRATEGY_CACHE_REDIS);
         redisCache.deleteObject(RedisConstant.DEVICE_FUNCTION_CACHE_REDIS);
         redisCache.deleteObject(RedisConstant.GATEWAY_CACHE_REDIS);
+        redisCache.deleteObject(RedisConstant.SPACE_STRATEGY_CACHE_REDIS);
+        redisCache.deleteObject(RedisConstant.WARNING_FLAG);
+
 
 
 

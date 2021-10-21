@@ -26,8 +26,19 @@ public class RedisConstant {
      */
     public static final String DEVICE_FUNCTION_CACHE_REDIS = "DeviceFunctionRedis";
 
+    /**
+     * 设备方法和设备名称的关联关系redis key值
+     */
     public static final String GATEWAY_CACHE_REDIS = "GatewayRedis";
 
+    /**
+     * 空间报警设备关联关系
+     */
     public static final String SPACE_INCLUDE_DEVICE_CACHE = "spaceIncludeDeviceCache";
+
+    /**
+     * 告警标识
+     */
+    public static final String WARNING_FLAG = "warningFlag";
 
 }

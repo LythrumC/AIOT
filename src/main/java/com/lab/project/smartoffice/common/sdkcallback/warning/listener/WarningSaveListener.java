@@ -13,12 +13,16 @@ import com.lab.project.smartoffice.common.sdkcallback.warning.domain.DeviceSpace
 import com.lab.project.smartoffice.common.space.mapper.SpaceMapper;
 import com.neusiri.ai.api.yitu.milesight.constant.KaConstant;
 import com.neusiri.ai.sdk.milesight.service.MilesightService;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -29,6 +33,7 @@ import java.util.Map;
 @Component
 @Slf4j
 public class WarningSaveListener {
+
     private DataWarningMapper dataWarningMapper;
 
     private RedisCache redisCache;
@@ -39,15 +44,28 @@ public class WarningSaveListener {
 
     @Order(1)
     @Async
-    @EventListener(WarningSaveListener.class)
+    @EventListener(WarningSaveEvent.class)
     public void warningRedisListener(WarningSaveEvent event){
-        log.info("处理告警相关的Redis信息");
+        DataCollectionEntity dataCollectionEntity = event.getDataCollectionEntity();
+        String key = dataCollectionEntity.getSpaceId()
+                     + dataCollectionEntity.getDeviceId()
+                     + dataCollectionEntity.getDeviceFunctionType();
+        Map<String, Boolean> cacheMap = redisCache.getCacheMap(RedisConstant.WARNING_FLAG);
+        if (cacheMap == null || cacheMap.size() == 0 || cacheMap.get(key) == null || cacheMap.get(key) == false){
+            cacheMap = new HashMap<>(16);
+            cacheMap.put(key,true);
+            redisCache.setCacheMap(RedisConstant.WARNING_FLAG,cacheMap);
+        }
     }
 
     @Order(2)
     @Async
-    @EventListener(WarningSaveListener.class)
+    @EventListener(WarningSaveEvent.class)
     public void warningSendMessageToSDK(WarningSaveEvent event){
+        if (getIsWarning(event.getDataCollectionEntity())){
+            log.info("已经发送的数据直接忽略");
+            return ;
+        }
         DataCollectionEntity dataCollectionEntity = event.getDataCollectionEntity();
         log.info("将报警信息推送到网关服务");
         Map<String, DeviceSpaceBO> stringDeviceSpaceBOMap = initSpaceAlarmRedis();
@@ -65,8 +83,11 @@ public class WarningSaveListener {
 
     @Order(3)
     @Async
-    @EventListener(WarningSaveListener.class)
+    @EventListener(WarningSaveEvent.class)
     public void warningSaveListener(WarningSaveEvent event){
+        if (getIsWarning(event.getDataCollectionEntity())){
+            return ;
+        }
         log.info("告警信息入库");
         // 设置基础状态
         DataCollectionEntity dataCollectionEntity = event.getDataCollectionEntity();
@@ -94,6 +115,17 @@ public class WarningSaveListener {
 
         }
         return deviceSpaceBOMap;
+    }
+
+    private boolean getIsWarning(DataCollectionEntity dataCollectionEntity){
+        String key = dataCollectionEntity.getSpaceId()
+                + dataCollectionEntity.getDeviceId()
+                + dataCollectionEntity.getDeviceFunctionType();
+        Map<String, Boolean> cacheMap = redisCache.getCacheMap(RedisConstant.WARNING_FLAG);
+        if (cacheMap == null || cacheMap.get(key) == null || cacheMap.get(key) == false){
+            return false;
+        }
+        return cacheMap.get(key);
     }
 
 

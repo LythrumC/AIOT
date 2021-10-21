@@ -1,0 +1,20 @@
+package com.lab.project.smartoffice.common.sdkcallback.warning.service;
+
+import com.lab.framework.web.domain.AjaxResult;
+import com.lab.project.smartoffice.common.sdkcallback.warning.domain.DataWarning;
+import com.lab.project.smartoffice.common.sdkcallback.warning.domain.dto.DataWarningDTO;
+
+import javax.xml.crypto.Data;
+import java.util.List;
+
+/**
+ * @author 陈宽
+ * @create 2021-10-21 16:49
+ * @description
+ */
+
+public interface DataWarningService {
+    List<DataWarning> list(DataWarningDTO DataWarningDTO);
+
+    AjaxResult editDataWarning(DataWarningDTO dataWarningDTO);
+}
