@@ -4,6 +4,7 @@ import com.lab.common.utils.ParameterUtil;
 import com.lab.framework.web.domain.AjaxResult;
 import com.lab.project.smartoffice.common.sdkcallback.warning.domain.DataWarning;
 import com.lab.project.smartoffice.common.sdkcallback.warning.domain.dto.DataWarningDTO;
+import com.lab.project.smartoffice.common.sdkcallback.warning.domain.vo.DataWarningVO;
 import com.lab.project.smartoffice.common.sdkcallback.warning.event.WarningClearEvent;
 import com.lab.project.smartoffice.common.sdkcallback.warning.listener.WarningClearListener;
 import com.lab.project.smartoffice.common.sdkcallback.warning.mapper.DataWarningMapper;
@@ -42,5 +43,15 @@ public class DataWarningServiceImpl implements DataWarningService {
             AjaxResult.error("乐观锁触发,修改失败");
         }
         return AjaxResult.success("操作成功");
+    }
+
+    @Override
+    public DataWarningVO statistics(DataWarning dataWarning) {
+        return dataWarningMapper.statistics(dataWarning);
+    }
+
+    @Override
+    public List<DataWarningVO> analyze(DataWarning dataWarning) {
+        return dataWarningMapper.analyze(dataWarning);
     }
 }

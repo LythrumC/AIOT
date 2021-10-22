@@ -2,6 +2,7 @@ package com.lab.project.smartoffice.common.sdkcallback.warning.mapper;
 
 import com.lab.project.smartoffice.common.sdkcallback.warning.domain.DataWarning;
 import com.lab.project.smartoffice.common.sdkcallback.warning.domain.dto.DataWarningDTO;
+import com.lab.project.smartoffice.common.sdkcallback.warning.domain.vo.DataWarningVO;
 
 import java.util.List;
 
@@ -20,4 +21,8 @@ public interface DataWarningMapper {
     List<DataWarning> selectDataWarning(DataWarningDTO dataWarningDTO);
 
     int editDataWarning(DataWarningDTO dataWarningDTO);
+
+    DataWarningVO statistics(DataWarning dataWarning);
+
+    List<DataWarningVO> analyze(DataWarning dataWarning);
 }

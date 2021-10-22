@@ -7,6 +7,7 @@ import com.lab.project.smartoffice.common.sdkcallback.warning.domain.DataWarning
 import com.lab.project.smartoffice.common.sdkcallback.warning.domain.dto.DataWarningDTO;
 import com.lab.project.smartoffice.common.sdkcallback.warning.service.DataWarningService;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.springframework.web.bind.annotation.*;
 
 import javax.ws.rs.PUT;
@@ -31,6 +32,17 @@ public class DataWarningController extends BaseController {
     @PutMapping("/edit")
     public AjaxResult edit(@RequestBody DataWarningDTO dataWarningDTO){
         return dataWarningService.editDataWarning(dataWarningDTO);
+    }
+
+    @GetMapping("/statistics")
+    public AjaxResult statistics(DataWarning dataWarning){
+        return AjaxResult.success(dataWarningService.statistics(dataWarning));
+    }
+
+    @GetMapping("/analyze")
+    public AjaxResult analyze(DataWarning dataWarning){
+        return AjaxResult.success(dataWarningService.analyze(dataWarning));
+
     }
 
 

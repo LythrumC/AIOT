@@ -131,4 +131,26 @@
             </foreach>
         </if>
     </select>
+    
+    <select id="statistics" parameterType="DataWarning" resultType="com.lab.project.smartoffice.common.sdkcallback.warning.domain.vo.DataWarningVO">
+        SELECT
+            (SELECT COUNT(1) FROM t_data_warning WHERE space_id = #{spaceId}) AS alarmsValue,
+            (SELECT COUNT(1) FROM t_data_warning WHERE space_id = #{spaceId} AND processing_status = 0) AS pendingValue,
+            (SELECT COUNT(1) FROM t_data_warning WHERE space_id = #{spaceId} AND processing_status = 1) AS processedValue
+    </select>
+
+    <select id="analyze" parameterType="DataWarning" resultType="com.lab.project.smartoffice.common.sdkcallback.warning.domain.vo.DataWarningVO">
+        SELECT data_warning_type,
+               COUNT( 1 ) as dataWarningValue
+        FROM
+               t_data_warning
+        WHERE
+              del_flag = '0'
+        <if test="spaceId != null">
+            AND space_id = #{spaceId}
+        </if>
+
+        GROUP BY
+              data_warning_type
+    </select>
 </mapper>
