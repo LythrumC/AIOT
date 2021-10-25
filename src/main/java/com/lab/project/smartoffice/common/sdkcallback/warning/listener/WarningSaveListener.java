@@ -5,6 +5,8 @@ import com.lab.common.utils.bean.BeanUtils;
 import com.lab.framework.redis.RedisCache;
 import com.lab.project.smartoffice.common.constant.RedisConstant;
 import com.lab.project.smartoffice.common.sdkcallback.domain.DataCollectionEntity;
+import com.lab.project.smartoffice.common.sdkcallback.domain.DeviceFunctionDTO;
+import com.lab.project.smartoffice.common.sdkcallback.domain.RedisData;
 import com.lab.project.smartoffice.common.sdkcallback.warning.domain.DataWarning;
 import com.lab.project.smartoffice.common.sdkcallback.warning.enums.WarningType;
 import com.lab.project.smartoffice.common.sdkcallback.warning.event.WarningSaveEvent;
@@ -23,6 +25,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -51,11 +54,25 @@ public class WarningSaveListener {
                      + dataCollectionEntity.getDeviceId()
                      + dataCollectionEntity.getDeviceFunctionType();
         Map<String, Boolean> cacheMap = redisCache.getCacheMap(RedisConstant.WARNING_FLAG);
-        if (cacheMap == null || cacheMap.size() == 0 || cacheMap.get(key) == null || cacheMap.get(key) == false){
+        if (cacheMap == null || cacheMap.get(key) == null || cacheMap.get(key) == false){
             cacheMap = new HashMap<>(16);
             cacheMap.put(key,true);
             redisCache.setCacheMap(RedisConstant.WARNING_FLAG,cacheMap);
         }
+        Map<String, RedisData> redisCacheCacheMap = redisCache.getCacheMap(String.valueOf(dataCollectionEntity.getSpaceId()));
+        RedisData redisData = redisCacheCacheMap.get(String.valueOf(dataCollectionEntity.getDeviceId()));
+        List<DeviceFunctionDTO> dataList = redisData.getDataList();
+
+        for (DeviceFunctionDTO deviceFunctionDTO : dataList) {
+            // 判断是否为告警数据
+            if (deviceFunctionDTO.getDeviceFunctionType().equals(dataCollectionEntity.getDeviceFunctionType())){
+                // 设置报警状态
+                deviceFunctionDTO.setWarning(true);
+            }
+        }
+        redisCacheCacheMap.put(String.valueOf(dataCollectionEntity.getDeviceId()),redisData);
+        redisCache.setCacheMap(String.valueOf(dataCollectionEntity.getSpaceId()),redisCacheCacheMap);
+
     }
 
     @Order(2)

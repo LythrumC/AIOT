@@ -11,6 +11,7 @@ import com.lab.project.smartoffice.common.sdkcallback.domain.CallBackDTO;
 import com.lab.project.smartoffice.common.sdkcallback.domain.DataCollectionEntity;
 import com.lab.project.smartoffice.common.sdkcallback.domain.DeviceFunctionDTO;
 import com.lab.project.smartoffice.common.device.domain.bo.DeviceFunctionBO;
+import com.lab.project.smartoffice.common.sdkcallback.domain.RedisData;
 import com.lab.project.smartoffice.common.sdkcallback.domain.bo.GatewayBO;
 import com.lab.project.smartoffice.common.sdkcallback.handle.DeviceFunctionHandlerContext;
 import com.lab.project.smartoffice.common.space.domain.bo.SpaceDeviceBO;
@@ -23,6 +24,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -66,6 +68,7 @@ public class DataHandlerService {
             log.info("获取设备绑定空间信息失败，设备id为{}",deviceId);
             return ;
         }
+        String spaceId = String.valueOf(spaceDeviceBO.getSpaceId());
         // 2.获取device相关信息
         Map<String, DeviceBO> deviceBOMap = initDeviceRedis();
         //   2.1 获取对应deviceId所在的设备信息
@@ -85,6 +88,29 @@ public class DataHandlerService {
         // 传输回来的数据(deviceFunctionData 和 deviceFunctionType)
         List<DeviceFunctionDTO> deviceFunctionDTOList = callBackDTO.getDataList();
         // 遍历回传集合收集到dataCollection中
+        //=============缓存Redis数据开始=============
+        RedisData redisData = new RedisData();
+        // 填充redisData属性
+        redisData.setSpaceId(spaceId);
+        redisData.setDeviceId(deviceId);
+        redisData.setDeviceName(deviceBO.getDeviceName());
+        redisData.setDevicePicUrl(deviceBO.getDevicePicUrl());
+        for (DeviceFunctionDTO deviceFunctionDTO : deviceFunctionDTOList) {
+            DeviceFunctionBO deviceFunctionBO = deviceFunctionBOMap.get(String.valueOf(deviceFunctionDTO.getDeviceFunctionType()));
+            deviceFunctionDTO.setWarning(false);
+            if (deviceFunctionBO == null){
+                log.info("在缓存中来找到:" + deviceFunctionDTO.getDeviceFunctionType() + "对应相关信息");
+                continue;
+            }
+            deviceFunctionDTO.setDeviceFunctionName(deviceFunctionBO.getDeviceFunctionTypeName() + "对应相关信息");
+        }
+        redisData.setDataList(deviceFunctionDTOList);
+        HashMap<String,RedisData> redisDataHashMap = new HashMap<>(16);
+        // 收集的值存入map
+        redisDataHashMap.put(deviceId,redisData);
+        // 将map存进redis
+        redisCache.setCacheMap(spaceId,redisDataHashMap);
+        //=============缓存Redis数据结束=============
         if (deviceFunctionDTOList != null && deviceFunctionDTOList.size() != 0){
             for (DeviceFunctionDTO deviceFunctionDTO : deviceFunctionDTOList) {
                 // Datacollection收集数据

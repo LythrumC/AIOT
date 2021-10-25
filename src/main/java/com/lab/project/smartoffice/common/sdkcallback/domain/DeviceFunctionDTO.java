@@ -1,6 +1,7 @@
 package com.lab.project.smartoffice.common.sdkcallback.domain;
 
 import lombok.Data;
+import lombok.ToString;
 
 /**
  * @author 陈宽
@@ -8,6 +9,7 @@ import lombok.Data;
  * @description
  */
 @Data
+@ToString
 public class DeviceFunctionDTO {
     /**
      * 对应功能回传数值
@@ -38,4 +40,14 @@ public class DeviceFunctionDTO {
      * 10001：UC1152-采集RS485传感器）
      */
     private Integer deviceFunctionType;
+
+    /**
+     * 方法名称
+     */
+    private String deviceFunctionName;
+
+    /**
+     * 是否报警
+     */
+    private Boolean warning;
 }
