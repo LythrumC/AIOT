@@ -42,8 +42,5 @@ public class DataWarningController extends BaseController {
     @GetMapping("/analyze")
     public AjaxResult analyze(DataWarning dataWarning){
         return AjaxResult.success(dataWarningService.analyze(dataWarning));
-
     }
-
-
 }

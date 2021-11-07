@@ -1,10 +1,13 @@
 package com.lab.project.smartoffice.common.space.service.Impl;
 
 import com.lab.common.utils.ParameterUtil;
+import com.lab.framework.redis.RedisCache;
 import com.lab.project.smartoffice.common.sdkcallback.runner.ClearRedis;
 import com.lab.project.smartoffice.common.space.domain.SpaceEntity;
+import com.lab.project.smartoffice.common.space.mapper.SpaceDeviceMapper;
 import com.lab.project.smartoffice.common.space.mapper.SpaceMapper;
 import com.lab.project.smartoffice.common.space.service.ISpaceService;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +20,7 @@ import java.util.List;
  * @description
  */
 @Service
+@AllArgsConstructor
 public class ISpaceServiceImpl implements ISpaceService {
 
     @Resource
@@ -24,6 +28,10 @@ public class ISpaceServiceImpl implements ISpaceService {
 
     @Resource
     private ClearRedis clearRedis;
+
+    private RedisCache redisCache;
+
+    private SpaceDeviceMapper spaceDeviceMapper;
 
     /**
      * 新增教室
@@ -53,8 +61,9 @@ public class ISpaceServiceImpl implements ISpaceService {
         ParameterUtil.setUpdateEntity(spaceEntity);
         // 清除Redis缓存
         clearRedis.clearRedisCache();
+        redisCache.deleteObject(String.valueOf(spaceEntity.getId()));
+        spaceDeviceMapper.removeSpaceDevice(spaceEntity.getId());
         return spaceMapper.removeSpace(spaceEntity);
-
     }
 
     /**

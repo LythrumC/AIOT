@@ -77,7 +77,7 @@
               AND td.device_type = #{deviceType}
           </if>
           <if test="deviceType == '' or deviceType == null">
-              AND td.device_type IN (10,20)
+              AND td.device_type IN (10,20,30,41,42,60)
           </if>
 
     </select>

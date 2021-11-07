@@ -37,8 +37,8 @@
 
     </update>
 
-    <insert id="addSpaceStrategy" parameterType="com.lab.project.smartoffice.common.space.domain.SpaceStrategyEntity" >
-        INSERT
+    <insert id="addSpaceStrategy" useGeneratedKeys="true" keyColumn="id" parameterType="java.util.List" >
+        INSERT INTO
         t_space_strategy(
         space_id,
         strategy_name,
@@ -50,6 +50,8 @@
         sort_no,
         create_time,
         create_by,
+        update_time,
+        update_by,
         version,
         del_flag
        )
@@ -67,6 +69,8 @@
             #{item.sortNo},
             #{item.createTime},
             #{item.createBy},
+            #{item.updateTime},
+            #{item.updateBy},
             #{item.version},
             #{item.delFlag}
             )

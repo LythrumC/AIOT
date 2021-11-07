@@ -23,7 +23,7 @@
 
     <select id="getDeviceFunctionMap" resultType="deviceFunctionBO">
         SELECT
-            device_function_type,
+            device_function_type as deviceFunctionType,
             device_function_name as deviceFunctionTypeName
         FROM
             t_device_function

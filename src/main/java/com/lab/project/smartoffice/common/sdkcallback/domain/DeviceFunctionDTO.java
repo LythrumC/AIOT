@@ -12,7 +12,7 @@ import lombok.ToString;
 @ToString
 public class DeviceFunctionDTO {
     /**
-     * 对应功能回传数值
+     * 对应功能回传数值，就是设备实际监测到的值
      */
     private Integer deviceFunctionData;
 

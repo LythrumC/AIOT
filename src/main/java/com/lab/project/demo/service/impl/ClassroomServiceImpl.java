@@ -67,6 +67,7 @@ public class ClassroomServiceImpl implements ClassroomService {
      */
     @Override
     public AjaxResult update(ClassroomEntity classroomEntity) {
+        // 设置基础属性
         ParameterUtil.setUpdateEntity(classroomEntity);
         return classroomMapper.updateClassroom(classroomEntity) > 0 ?
                 AjaxResult.success() : AjaxResult.error("触发乐观锁，修改失败");

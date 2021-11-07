@@ -7,6 +7,7 @@ import com.lab.project.smartoffice.common.space.domain.SpaceStrategyEntity;
 import com.lab.project.smartoffice.common.space.domain.dto.SpaceStrategyDTO;
 import com.lab.project.smartoffice.common.space.mapper.SpaceStrategyMapper;
 import com.lab.project.smartoffice.common.space.service.ISpaceStrategyService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +23,7 @@ import java.util.List;
  * @description
  */
 @Service
+@AllArgsConstructor
 public class ISpaceStrategyImpl implements ISpaceStrategyService {
     @Resource
     private SpaceStrategyMapper spaceStrategyMapper;
@@ -40,7 +42,7 @@ public class ISpaceStrategyImpl implements ISpaceStrategyService {
             List<SpaceStrategyEntity> list = spaceStrategyMapper.listSpaceStrategy(spaceId);
             if (list.size() > 0){ spaceStrategyMapper.removeSpaceDevice(spaceId); }
 
-            // 2.新增设备
+            // 2.新增策略
             if (!CollectionUtils.isEmpty(spaceStrategyEntities)){
                 for (SpaceStrategyEntity spaceStrategyEntity : spaceStrategyEntities) {
                     // 添加基础属性
@@ -49,7 +51,7 @@ public class ISpaceStrategyImpl implements ISpaceStrategyService {
                 spaceStrategyMapper.addSpaceStrategy(spaceStrategyEntities);
             }
         }catch(Exception e) {
-            // 设备被占用，手动回滚
+            // 添加失败，手动回滚
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return AjaxResult.error("策略添加失败");
         }

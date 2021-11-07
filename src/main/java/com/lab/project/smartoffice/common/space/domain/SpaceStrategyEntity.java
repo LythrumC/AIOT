@@ -76,12 +76,12 @@ public class SpaceStrategyEntity extends BaseEntity {
     /**
      * 策略值小于，有符号，个位为小数点后1位，数值除以10为实际值
      */
-    private int strategyDataSmallerThan;
+    private Integer strategyDataSmallerThan;
 
     /**
      * 策略值大于，有符号，个位为小数点后1位，数值除以10为实际值
      */
-    private int strategyDataBiggerThan;
+    private Integer strategyDataBiggerThan;
 
     /**
      * 序号

@@ -1,6 +1,7 @@
 package com.lab.project.smartoffice.common.sdkcallback.domain.bo;
 
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 
 import java.io.Serializable;
 
@@ -9,6 +10,7 @@ import java.io.Serializable;
  * @create 2021-10-14 15:30
  * @description
  */
+@Data
 public class GatewayBO implements Serializable {
     /**
      * 网关id（平台回传）

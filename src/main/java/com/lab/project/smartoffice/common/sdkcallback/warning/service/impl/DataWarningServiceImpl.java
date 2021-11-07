@@ -1,6 +1,7 @@
 package com.lab.project.smartoffice.common.sdkcallback.warning.service.impl;
 
 import com.lab.common.utils.ParameterUtil;
+import com.lab.framework.aspectj.lang.annotation.Log;
 import com.lab.framework.web.domain.AjaxResult;
 import com.lab.project.smartoffice.common.sdkcallback.warning.domain.DataWarning;
 import com.lab.project.smartoffice.common.sdkcallback.warning.domain.dto.DataWarningDTO;
@@ -9,10 +10,14 @@ import com.lab.project.smartoffice.common.sdkcallback.warning.event.WarningClear
 import com.lab.project.smartoffice.common.sdkcallback.warning.listener.WarningClearListener;
 import com.lab.project.smartoffice.common.sdkcallback.warning.mapper.DataWarningMapper;
 import com.lab.project.smartoffice.common.sdkcallback.warning.service.DataWarningService;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
+import javax.annotation.Resources;
 import java.util.List;
 
 /**
@@ -21,6 +26,8 @@ import java.util.List;
  * @description
  */
 @Service
+@Slf4j
+@AllArgsConstructor
 public class DataWarningServiceImpl implements DataWarningService {
 
     private DataWarningMapper dataWarningMapper;
@@ -29,6 +36,9 @@ public class DataWarningServiceImpl implements DataWarningService {
 
     @Override
     public List<DataWarning> list(DataWarningDTO dataWarningDTO) {
+        List<DataWarning> dataWarningList = dataWarningMapper.selectDataWarning(dataWarningDTO);
+        log.info("dataWarningMapper==========" + dataWarningList);
+
         return dataWarningMapper.selectDataWarning(dataWarningDTO);
     }
 

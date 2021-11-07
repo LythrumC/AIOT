@@ -66,7 +66,7 @@ public class WarningClearListener {
                 continue;
             }
             // 清除警告信息
-            milesightService.getKaAlertorService().manipulate(dataWarning.getGateWayId(),
+            milesightService.getKaAlertorService().manipulate(dataWarning.getGatewayId(),
                     deviceSpaceBO.getDeviceId(),
                     KaConstant.CONTROL_ALERTOR_STATE_OFF,
                     KaConstant.PORT);

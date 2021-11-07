@@ -33,7 +33,7 @@ public class LeakWaterHandler extends AbstractDeviceTypeHandler {
         // 策略开启
         if (LeakWaterStatus.LEAK_WATER_ON.getCode().equals(dataCollectionEntity.getDeviceFunctionData())){
             // 发送警告信息
-            applicationEventPublisher.publishEvent(new WarningSaveEvent(dataCollectionEntity,dataCollectionEntity.getDeviceFunctionType()));
+            applicationEventPublisher.publishEvent(new WarningSaveEvent(dataCollectionEntity,Integer.valueOf(dataCollectionEntity.getDeviceFunctionType())));
 
         }
 

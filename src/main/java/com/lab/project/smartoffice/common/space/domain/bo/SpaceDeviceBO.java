@@ -56,6 +56,12 @@ public class SpaceDeviceBO implements Serializable {
     private String deviceId;
 
     /**
+     * 设备类型
+     */
+    @ApiModelProperty(value = "设备类型")
+    private Integer deviceType;
+
+    /**
      * 空间id
      */
     @ApiModelProperty(value = "空间id")

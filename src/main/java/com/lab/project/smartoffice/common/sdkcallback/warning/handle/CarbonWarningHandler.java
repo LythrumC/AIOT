@@ -33,7 +33,7 @@ public class CarbonWarningHandler extends AbstractDeviceTypeHandler {
         int result = dataCollectionEntity.getStrategyDataBiggerThan().compareTo(dataCollectionEntity.getDeviceFunctionData());
         if (result < 0){
             // 发送警告信息
-            applicationEventPublisher.publishEvent(new WarningSaveEvent(dataCollectionEntity,dataCollectionEntity.getDeviceFunctionType()));
+            applicationEventPublisher.publishEvent(new WarningSaveEvent(dataCollectionEntity,Integer.valueOf(dataCollectionEntity.getDeviceFunctionType())));
 
         }
 

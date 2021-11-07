@@ -92,10 +92,12 @@
             tsd.device_position_y,
             tsd.device_position_z,
             tsd.device_position,
+            td.device_type,
                (CASE ts.space_type WHEN 10 Then '机房' WHEN 12 THEN '会议室' ELSE '环境点' END) AS space_type_name
             FROM
                t_space_device AS tsd
-               LEFT JOIN t_space ts ON tsd.del_flag = '0'
+               LEFT JOIN t_space ts ON tsd.del_flag = '0' and tsd.space_id = ts.id
+               LEFT JOIN t_device td ON tsd.device_id = td.id
                AND tsd.space_id = ts.id
             WHERE
                tsd.del_flag = '0'

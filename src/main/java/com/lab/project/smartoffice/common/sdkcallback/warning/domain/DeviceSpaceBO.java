@@ -1,6 +1,7 @@
 package com.lab.project.smartoffice.common.sdkcallback.warning.domain;
 
 import lombok.Data;
+import lombok.ToString;
 
 /**
  * @author 陈宽
@@ -8,8 +9,9 @@ import lombok.Data;
  * @description
  */
 @Data
+@ToString
 public class DeviceSpaceBO {
-    private Long SpaceId;
+    private String SpaceId;
 
     private String DeviceId;
 

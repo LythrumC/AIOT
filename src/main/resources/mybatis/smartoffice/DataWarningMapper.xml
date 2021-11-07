@@ -6,13 +6,15 @@
 
 <mapper namespace="com.lab.project.smartoffice.common.sdkcallback.warning.mapper.DataWarningMapper">
     <!--插入操作-->
-    <insert id="saveDataWarning" parameterType="DataWarningDTO" useGeneratedKeys="true" keyProperty="id">
+    <insert id="saveDataWarning" parameterType="com.lab.project.smartoffice.common.sdkcallback.warning.domain.DataWarning" useGeneratedKeys="true" keyProperty="id">
         insert into t_data_warning(
             data_collection_id,
             data_warning_type,
+            data_warning_type_name,
             processing_status,
             space_id,
             space_type,
+            space_type_name,
             space_name,
             space_position,
             space_capacity,
@@ -24,10 +26,7 @@
             device_name,
             device_model,
             device_type,
-            space_type_name,
             device_type_name,
-            device_function_type_name,
-            data_warning_type_name,
             device_position,
             device_position_x,
             device_position_y,
@@ -43,6 +42,7 @@
             strategy_data_smaller_than,
             strategy_data_bigger_than,
             device_function_type,
+            device_function_type_name,
             device_function_data,
             sort_no,
             create_time,
@@ -52,51 +52,51 @@
             version,
             del_flag
         ) values
-            (
-             #{dataCollectionId},
-             #{dataWarningType},
-             #{processingStatus},
-             #{spaceId}
-             #{spaceType},
-             #{spaceName},
-             #{spacePosition},
-             #{spaceCapacity},
-             #{spacePicUrl},
-             #{gatewayId},
-             #{gatewayName},
-             #{gatewayModel},
-             #{deviceId},
-             #{deviceName},
-             #{deviceModel},
-             #{deviceType},
-             #{spaceTypeName},
-             #{deviceTypeName},
-             #{deviceFunctionTypeName},
-             #{dataWarningTypeName},
-             #{devicePosition},
-             #{devicePositionX},
-             #{devicePositionY},
-             #{devicePositionZ},
-             #{devicePicUrl},
-             #{deviceLength},
-             #{deviceWidth},
-             #{deviceHeight},
-             #{strategyId},
-             #{strategyName},
-             #{strategyIsEnable},
-             #{strategyData}，
-             #{strategyDataSmallerThan},
-             #{strategyDataBiggerThan},
-             #{deviceFunctionType},
-             #{deviceFunctionData},
-             #{sortNo},
-             #{createTime},
-             #{createBy},
-             #{updateTime},
-             #{updateBy},
-             #{version},
-             #{delFlag}
-            )
+        (
+            #{dataCollectionId},
+            #{dataWarningType},
+            #{dataWarningTypeName},
+            #{processingStatus},
+            #{spaceId},
+            #{spaceType},
+            #{spaceTypeName},
+            #{spaceName},
+            #{spacePosition},
+            #{spaceCapacity},
+            #{spacePicUrl},
+            #{gatewayId},
+            #{gatewayName},
+            #{gatewayModel},
+            #{deviceId},
+            #{deviceName},
+            #{deviceModel},
+            #{deviceType},
+            #{deviceTypeName},
+            #{devicePosition},
+            #{devicePositionX},
+            #{devicePositionY},
+            #{devicePositionZ},
+            #{devicePicUrl},
+            #{deviceLength},
+            #{deviceWidth},
+            #{deviceHeight},
+            #{strategyId},
+            #{strategyName},
+            #{strategyIsEnable},
+            #{strategyData},
+            #{strategyDataSmallerThan},
+            #{strategyDataBiggerThan},
+            #{deviceFunctionType},
+            #{deviceFunctionTypeName},
+            #{deviceFunctionData},
+            #{sortNo},
+            #{createTime},
+            #{createBy},
+            #{updateTime},
+            #{updateBy},
+            #{version},
+            #{delFlag}
+        )
     </insert>
 
     <update id="editDataWarning">
@@ -121,8 +121,8 @@
         <if test="spaceId != null">
             AND  space_id = #{spaceId}
         </if>
-        <if test="processStatus != null">
-            AND  process_status = #{processStatus}
+        <if test="processingStatus != null">
+            AND  processing_status = #{processingStatus}
         </if>
         <if test="ids != null">
             AND id IN

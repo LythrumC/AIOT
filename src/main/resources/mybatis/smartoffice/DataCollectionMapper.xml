@@ -5,18 +5,15 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.lab.project.smartoffice.common.datacollection.mapper.DataCollectionMapper">
-    <insert id="insertBatch" parameterType="DataCollectionEntity" useGeneratedKeys="true" keyProperty="id">
-        insert into
-        (
+    <insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_data_collection (
         space_id,
         space_type,
+        space_type_name,
         space_name,
         space_position,
         space_capacity,
         space_pic_url,
-        space_type_name,
-        device_type_name,
-        device_type_function_name,
         gateway_id,
         gateway_name,
         gateway_model,
@@ -24,10 +21,12 @@
         device_name,
         device_model,
         device_type,
+        device_type_name,
         device_position,
         device_position_x,
         device_position_y,
         device_position_z,
+        device_pic_url,
         device_length,
         device_width,
         device_height,
@@ -38,55 +37,78 @@
         strategy_data_smaller_than,
         strategy_data_bigger_than,
         device_function_type,
+        device_function_type_name,
         device_function_data,
         sort_no,
         create_time,
         create_by,
+        update_time,
+        update_by,
         version,
         del_flag
-        ) values
-        <foreach collection="dataCollectionEntityList" item="item" index="index" separator=",">
+        ) VALUES
+        <foreach collection="dataCollectionEntityList" item="item" separator=",">
             (
             #{item.spaceId},
             #{item.spaceType},
+            #{item.spaceTypeName},
             #{item.spaceName},
             #{item.spacePosition},
             #{item.spaceCapacity},
             #{item.spacePicUrl},
-            #{item.spaceTypeName},
-            #{item.deviceTypeName},
-            #{item.deviceFunctionTypeName},
             #{item.gatewayId},
             #{item.gatewayName},
-            #{item.gatewayModel}
+            #{item.gatewayModel},
             #{item.deviceId},
             #{item.deviceName},
             #{item.deviceModel},
             #{item.deviceType},
-            #{item.device_position},
-            #{item.device_position_x},
-            #{item.device_position_y},
-            #{item.device_position_z}
-            #{item.device_length},
-            #{item.device_width},
-            #{item.device_height},
-            #{item.strategy_id},
-            #{item.strategy_name},
-            #{item.strategy_is_enable},
-            #{item.strategy_data},
-            #{item.strategy_data_smaller_than},
-            #{item.strategy_data_bigger_than},
-            #{item. device_function_type},
-            #{item. device_function_data},
+            #{item.deviceTypeName},
+            #{item.devicePosition},
+            #{item.devicePositionX},
+            #{item.devicePositionY},
+            #{item.devicePositionZ},
+            #{item.devicePicUrl},
+            #{item.deviceLength},
+            #{item.deviceWidth},
+            #{item.deviceHeight},
+            #{item.strategyId},
+            #{item.strategyName},
+            #{item.strategyIsEnable},
+            #{item.strategyData},
+            #{item.strategyDataSmallerThan},
+            #{item.strategyDataBiggerThan},
+            #{item.deviceFunctionType},
+            #{item.deviceFunctionTypeName},
+            #{item.deviceFunctionData},
             #{item.sortNo},
             #{item.createTime},
             #{item.createBy},
+            #{item.updateTime},
+            #{item.updateBy},
             #{item.version},
             #{item.delFlag}
             )
         </foreach>
     </insert>
 
-
-
+    <select id="listDataCollectionGraph" resultType="com.lab.project.smartoffice.common.sdkcallback.domain.DataCollectionEntity">
+        SELECT
+               *
+        FROM t_data_collection
+        WHERE
+            create_time > DATE_SUB(
+                NOW(),
+                INTERVAL 12 HOUR)
+        <if test="spaceId != '' and spaceId != null">
+            and space_id = #{spaceId}
+        </if>
+        <if test="deviceId != '' and deviceId != null">
+            and device_id = #{deviceId}
+        </if>
+        <if test="deviceFunctionType != null">
+            and device_function_type = #{deviceFunctionType}
+        </if>
+        ORDER BY create_by DESC
+    </select>
 </mapper>

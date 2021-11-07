@@ -1,6 +1,7 @@
 package com.lab.project.smartoffice.common.datacollection.mapper;
 
 import com.lab.project.smartoffice.common.sdkcallback.domain.DataCollectionEntity;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -15,5 +16,7 @@ public interface DataCollectionMapper {
      * 批量插入dataCollection到数据表中
      * @param dataCollectionEntityList
      */
-    void insertBatch(List<DataCollectionEntity> dataCollectionEntityList);
+    void insertBatch(@Param("dataCollectionEntityList") List<DataCollectionEntity> dataCollectionEntityList);
+
+    List<DataCollectionEntity> listDataCollectionGraph(DataCollectionEntity dataCollectionEntity);
 }

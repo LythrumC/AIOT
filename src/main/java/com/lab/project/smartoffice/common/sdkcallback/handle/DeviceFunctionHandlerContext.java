@@ -2,6 +2,7 @@ package com.lab.project.smartoffice.common.sdkcallback.handle;
 
 import com.lab.framework.aspectj.lang.annotation.Log;
 import com.lab.project.smartoffice.common.sdkcallback.annotation.DeviceFunctionAnnotation;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
@@ -21,8 +22,9 @@ import java.util.Map;
 @Slf4j
 @Data
 @Component
+@AllArgsConstructor
 public class DeviceFunctionHandlerContext implements ApplicationContextAware {
-    @Autowired
+
     ApplicationContext applicationContext;
 
     private static final  Map<String, Class> BEAN_HASH_MAP = new HashMap<>(10);

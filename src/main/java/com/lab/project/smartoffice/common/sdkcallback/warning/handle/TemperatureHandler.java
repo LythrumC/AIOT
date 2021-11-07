@@ -26,18 +26,21 @@ public class TemperatureHandler extends AbstractDeviceTypeHandler {
     @Override
     public void saveWarining(DataCollectionEntity dataCollectionEntity) {
         log.info("进入温度异常对应的处理方式");
+        log.info("最大温度======{}",dataCollectionEntity.getStrategyDataBiggerThan());
+        log.info("最小温度======{}",dataCollectionEntity.getStrategyDataSmallerThan());
         // 策略是否开启
         if (StrategyEnable.STRATEGY_ENABLE_OFF.equals(dataCollectionEntity.getStrategyIsEnable())){
             // 策略没有开启
+            log.info("温度策略没有开启");
             return ;
         }
 
         // 跟最大值做比较
         if (dataCollectionEntity.getStrategyDataBiggerThan() != null){
-            int result = dataCollectionEntity.getStrategyDataBiggerThan().compareTo(dataCollectionEntity.getDeviceFunctionData());
+            int result = dataCollectionEntity.getStrategyDataBiggerThan().compareTo(Integer.valueOf(dataCollectionEntity.getDeviceFunctionData()));
             if (result < 0){
                 // 发送警告信息
-                applicationEventPublisher.publishEvent(new WarningSaveEvent(dataCollectionEntity, dataCollectionEntity.getDeviceFunctionType()));
+                applicationEventPublisher.publishEvent(new WarningSaveEvent(dataCollectionEntity, Integer.valueOf(dataCollectionEntity.getDeviceFunctionType())));
             }
         }
 
@@ -45,8 +48,7 @@ public class TemperatureHandler extends AbstractDeviceTypeHandler {
         if (dataCollectionEntity.getStrategyDataSmallerThan() != null){
             int res = dataCollectionEntity.getStrategyDataSmallerThan().compareTo(dataCollectionEntity.getDeviceFunctionData());
             if (res > 0){
-                applicationEventPublisher.publishEvent(new WarningSaveEvent(dataCollectionEntity, dataCollectionEntity.getDeviceFunctionType()));
-
+                applicationEventPublisher.publishEvent(new WarningSaveEvent(dataCollectionEntity,Integer.valueOf(dataCollectionEntity.getDeviceFunctionType())));
             }
 
         }
