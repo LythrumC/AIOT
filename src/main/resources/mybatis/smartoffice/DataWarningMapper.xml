@@ -118,18 +118,49 @@
         FROM t_data_warning
         WHERE
              del_flag = '0'
+        <!--deviceName-->
+        <if test="deviceName != null">
+            AND device_name = #{deviceName}
+        </if>
+
+        <!--deviceName-->
+        <if test="dataWarningType != null">
+            AND data_warning_type = #{dataWarningType}
+        </if>
+
+        <!--processingStatus-->
+        <if test="processingStatus != null">
+            AND processing_status = #{processingStatus}
+        </if>
+
+        <!--beginTime-->
+        <if test="beginTime != null">
+            AND create_time >= #{beginTime}
+        </if>
+
+        <!--endTime-->
+        <if test="endTime != null">
+            AND create_time &lt;= #{endTime}
+        </if>
+
+        <!--spaceType-->
+        <if test="spaceType != null">
+            AND space_type = #{spaceType}
+        </if>
+
+        <!--spaceId-->
         <if test="spaceId != null">
             AND  space_id = #{spaceId}
         </if>
-        <if test="processingStatus != null">
-            AND  processing_status = #{processingStatus}
-        </if>
+
+        <!--ids-->
         <if test="ids != null">
             AND id IN
             <foreach collection="ids" item="id" open="(" close=")" separator=",">
                 #{id}
             </foreach>
         </if>
+
     </select>
     
     <select id="statistics" parameterType="DataWarning" resultType="com.lab.project.smartoffice.common.sdkcallback.warning.domain.vo.DataWarningVO">

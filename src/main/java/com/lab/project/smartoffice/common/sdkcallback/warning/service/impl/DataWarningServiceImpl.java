@@ -34,12 +34,16 @@ public class DataWarningServiceImpl implements DataWarningService {
 
     private ApplicationEventPublisher applicationEventPublisher;
 
+    /**
+     * 根据条件筛选、显示告警信息
+     * @param dataWarningDTO
+     * @return
+     */
     @Override
     public List<DataWarning> list(DataWarningDTO dataWarningDTO) {
         List<DataWarning> dataWarningList = dataWarningMapper.selectDataWarning(dataWarningDTO);
-        log.info("dataWarningMapper==========" + dataWarningList);
-
-        return dataWarningMapper.selectDataWarning(dataWarningDTO);
+        log.info("selectDataWarning=={}",dataWarningList);
+        return dataWarningList;
     }
 
     @Override

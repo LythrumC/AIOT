@@ -57,10 +57,12 @@ public class DataHandlerService {
      * @param callBackDTO
      */
     public void handleDataParam(CallBackDTO callBackDTO){
+        log.info("handleDataParam====callback====" + callBackDTO);
         // 获取设备id和网关id
         String deviceId = callBackDTO.getDeviceEui();
         String getewayId = callBackDTO.getGeteWayEui();
-        // 1.获取Space相关信息
+        log.info("getewayId=={}",getewayId);
+        // 1.获取Space中相关device信息
         Map<String, SpaceDeviceBO> spaceDeviceBOMap = initSpaceDeviceRedis();
         //   1.1 通过deviceID作为KEY值，拿到spaceDeviceBO
         SpaceDeviceBO spaceDeviceBO = spaceDeviceBOMap.get(deviceId);
@@ -73,8 +75,10 @@ public class DataHandlerService {
         Map<String, DeviceBO> deviceBOMap = initDeviceRedis();
         //   2.1 获取对应deviceId所在的设备信息
         DeviceBO deviceBO = deviceBOMap.get(deviceId);
+        log.info("deviceBo======{}" + deviceBO);
         // 3.获取spaceStrategy相关信息
         Map<String, SpaceStrategyBO> spaceStrategyBOMap = initSpaceStrategyRedis();
+        log.info("spaceStrategyBOMap====={}",spaceStrategyBOMap);
         // 4.获取deviceFunction相关信息
         Map<String, DeviceFunctionBO> deviceFunctionBOMap = initDeviceFunctionRedis();
         // 5.获取gateway相关信息
@@ -98,6 +102,7 @@ public class DataHandlerService {
         for (DeviceFunctionDTO deviceFunctionDTO : deviceFunctionDTOList) {
             DeviceFunctionBO deviceFunctionBO = deviceFunctionBOMap.get(String.valueOf(deviceFunctionDTO.getDeviceFunctionType()));
             deviceFunctionDTO.setWarning(false);
+            log.info("deviceFunctionType======{}",deviceFunctionBO.getDeviceFunctionType());
             if (deviceFunctionBO == null){
                 log.info("在缓存中来找到:" + deviceFunctionDTO.getDeviceFunctionType() + "对应相关信息");
                 continue;
@@ -119,47 +124,56 @@ public class DataHandlerService {
                 BeanUtils.copyProperties(spaceDeviceBO,dataCollectionEntity);
                 // 2.属性拷贝，把deviceBO中的属性拷贝到dataCollection中
                 BeanUtils.copyProperties(deviceBO,dataCollectionEntity);
-                // 3.属性拷贝，把SpaceStrategyBO中的属性拷贝到dataCollection中
-                //   3.1 拼接Key
-                String spaceUnionStrategy = spaceDeviceBO.getSpaceId() + "@" + deviceFunctionDTO.getDeviceFunctionType();
-                SpaceStrategyBO spaceStrategyBO = spaceStrategyBOMap.get(spaceUnionStrategy);
-                if (spaceStrategyBO == null){
-                    continue;
-                }
-                //   3.2 属性拷贝
-                BeanUtils.copyProperties(spaceStrategyBOMap,dataCollectionEntity);
+
                 // 4.属性拷贝，把deviceFunctionBO中的属性拷贝到dataCollection中
                 //   4.1 获取deviceFunctionBO
-                DeviceFunctionBO deviceFunctionBO = deviceFunctionBOMap.get(deviceFunctionDTO.getDeviceFunctionType());
+                    DeviceFunctionBO deviceFunctionBO = deviceFunctionBOMap.get(String.valueOf(deviceFunctionDTO.getDeviceFunctionType()));
                 //   4.2 属性拷贝
                 BeanUtils.copyProperties(deviceFunctionBO,dataCollectionEntity);
+                log.info("BeanUtils拷贝deviceFunctionBO结束===={}",dataCollectionEntity);
                 // 5.属性拷贝，把GateWayBO中的属性拷贝到dataCollection中
+                log.info("gatewayBO=={}",gatewayBO);
                 BeanUtils.copyProperties(gatewayBO,dataCollectionEntity);
                 // 6.填充deviceFunctionData值
                 dataCollectionEntity.setDeviceFunctionData(deviceFunctionDTO.getDeviceFunctionData());
 
-
-
-                BeanUtils.copyProperties(deviceBOMap,dataCollectionEntity);
+                BeanUtils.copyProperties(deviceBO,dataCollectionEntity);
+                log.info("deviceBO==={}",deviceBO);
+                log.info("BeanUtils拷贝deviceBO结束===={}",dataCollectionEntity);
                 // 7.填充dataCollection公共属性
                 dataCollectionEntity.setCreateBy("系统创建");
                 ParameterUtil.setCreateEntity(dataCollectionEntity);
                 dataCollectionEntityList.add(dataCollectionEntity);
+//                log.info("dataCollectionEntityList=={}",dataCollectionEntityList);
+                log.info("dataCollectionEntityList的数量为==={}",dataCollectionEntityList.size());
             }
         }
-        dataCollectionEntityList.forEach(System.out::println);
+
         // 批量插入到数据库
         if(dataCollectionEntityList.size() > 0){
+            log.info("批量插入到数据库");
             dataCollectionMapper.insertBatch(dataCollectionEntityList);
         }
         log.info("入库完成插入数据数量：{}",dataCollectionEntityList.size());
         // 处理并判断是否需要警告
         for (DataCollectionEntity dataCollectionEntity : dataCollectionEntityList) {
-            // 发异步送警告信息
+            //   3.1 拼接Key
+            String spaceUnionStrategy = spaceDeviceBO.getSpaceId() + "@" + dataCollectionEntity.getDeviceFunctionType();
+            SpaceStrategyBO spaceStrategyBO = spaceStrategyBOMap.get(spaceUnionStrategy);
+            log.info("spaceStrategyBO{}=",spaceStrategyBO);
+            if (spaceStrategyBO == null){
+                log.info("spaceStrategyBO为空");
+                continue;
+            }
+            // 3.2属性拷贝，把SpaceStrategyBO中的属性拷贝到dataCollection中
+            BeanUtils.copyProperties(spaceStrategyBO,dataCollectionEntity);
+            log.info("BeanUtils拷贝后spaceStrategyBO结束===={}",dataCollectionEntity);
+            // 发送异步警告信息
+            log.info("发送异步警告信息===dataCollectionEntity===={}",dataCollectionEntity.toString());
+//            log.info("发送异步警告信息===dataCollectionEntity.getFunctionType===={}",dataCollectionEntity.getDeviceFunctionType());
             deviceFunctionHandlerContext.getHandlerInstance(String.valueOf(dataCollectionEntity
                     .getDeviceFunctionType()))
                     .saveWarining(dataCollectionEntity);
-
         }
     }
 
@@ -172,8 +186,10 @@ public class DataHandlerService {
             gatewayBOMap = deviceMapper.getGatewayMap();
             // 2.2将存储的结果放进Redis
             redisCache.setCacheMap(RedisConstant.GATEWAY_CACHE_REDIS,gatewayBOMap);
+            log.info("gatewayBOMap=========== " + gatewayBOMap.toString());
         }
         // 3.返回查询结果
+        log.info("initGateWayRedis====gatewayBOMap==={}",gatewayBOMap);
         return gatewayBOMap;
     }
 
@@ -184,10 +200,12 @@ public class DataHandlerService {
     private Map<String, DeviceFunctionBO> initDeviceFunctionRedis() {
         // 1.直接从redis中获取
         Map<String, DeviceFunctionBO> deviceFunctionBOMap = redisCache.getCacheMap(RedisConstant.DEVICE_FUNCTION_CACHE_REDIS);
+        log.info("initDeviceFunctionRedis=========redisCache.getCacheMap()====={}",deviceFunctionBOMap);
         // 2.判断从Redis取出的数据是否存在
         if (deviceFunctionBOMap.size() == 0){
             // 2.1如果没有数据，则从数据库中获取
             deviceFunctionBOMap = deviceMapper.getDeviceFunctionMap();
+            log.info("initDeviceFunctionRedis=========deviceMapper.getDeviceFunctionMap()====={}",deviceFunctionBOMap);
             // 2.2将存储的结果放进Redis
             redisCache.setCacheMap(RedisConstant.DEVICE_FUNCTION_CACHE_REDIS,deviceFunctionBOMap);
         }
@@ -219,13 +237,17 @@ public class DataHandlerService {
      */
     public Map<String, SpaceDeviceBO> initSpaceDeviceRedis(){
         // 1.直接从redis中获取
+        log.info("============initSpaceDeviceRedis==================");
         Map<String, SpaceDeviceBO> spaceDeviceRedis = redisCache.getCacheMap(RedisConstant.SPACE_DEVICE_CACHE_REDIS);
+        log.info("===========spaceDeviceRedis=============" + spaceDeviceRedis);
         // 2.判断从Redis取出的数据是否存在
         if (spaceDeviceRedis.size() == 0 ){
             // 2.1如果没有数据，则从数据库中获取
             spaceDeviceRedis = spaceMapper.getSpaceDeviceMap();
+
             // 2.2将存储的结果放进Redis
             redisCache.setCacheMap(RedisConstant.SPACE_DEVICE_CACHE_REDIS,spaceDeviceRedis);
+            log.info("initSpaceDeviceRedis,存储的结果放进Redis=====" + spaceDeviceRedis);
 
         }
         // 3.返回查询结果

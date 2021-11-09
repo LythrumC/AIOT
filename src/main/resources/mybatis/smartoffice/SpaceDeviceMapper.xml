@@ -145,7 +145,6 @@
         </set>
         WHERE
             tsd.space_id = #{spaceId}
-
     </update>
 
     <select id="noUseDeviceInSpace" resultType="java.lang.Integer" parameterType="java.util.List">

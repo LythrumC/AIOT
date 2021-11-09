@@ -15,6 +15,11 @@ import java.util.List;
  */
 
 public interface DataWarningService {
+    /**
+     * 根据条件筛选告警信息
+     * @param DataWarningDTO
+     * @return
+     */
     List<DataWarning> list(DataWarningDTO DataWarningDTO);
 
     AjaxResult editDataWarning(DataWarningDTO dataWarningDTO);

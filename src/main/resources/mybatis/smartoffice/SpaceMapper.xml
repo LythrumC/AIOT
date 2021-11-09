@@ -48,7 +48,14 @@
                space_pic_url
         FROM t_space
         WHERE
-             space_type = #{spaceType} AND del_flag = '0'
+             space_type = #{spaceType}
+             AND del_flag = '0'
+        <if test="spaceName != null">
+             AND space_name = #{spaceName}
+        </if>
+       <if test="spacePosition != null">
+             AND space_position = #{spacePosition}
+       </if>
     </select>
 
     <!--删除教室信息-->

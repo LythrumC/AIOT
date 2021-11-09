@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -51,8 +52,8 @@ public class ISpaceServiceImpl implements ISpaceService {
      * @return
      */
     @Override
-    public List<SpaceEntity> getSpaceList(String spaceType) {
-        return spaceMapper.getSpaceList(spaceType);
+    public List<SpaceEntity> getSpaceList(String spaceType, String spaceName, String spacePosition) {
+             return  spaceMapper.getSpaceList(spaceType,spaceName,spacePosition);
     }
 
     @Override

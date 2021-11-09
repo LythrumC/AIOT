@@ -18,6 +18,11 @@ public interface DataWarningMapper {
      */
     void saveDataWarning(DataWarning dataWarning);
 
+    /**
+     * 查询告警信息
+     * @param dataWarningDTO
+     * @return
+     */
     List<DataWarning> selectDataWarning(DataWarningDTO dataWarningDTO);
 
     int editDataWarning(DataWarningDTO dataWarningDTO);

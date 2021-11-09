@@ -55,7 +55,7 @@ public class ISpaceDeviceServiceImpl implements ISpaceDeviceService {
      */
     @Override
     public List<DeviceEntity> listNoUse(String deviceType, String deviceName) {
-        log.info("deviceType=={},deviceName=={}",deviceName,deviceType);
+//        log.info("deviceType=={},deviceName=={}",deviceName,deviceType);
         List<DeviceEntity> deviceEntities = spaceDeviceMapper.listNoUse(deviceType,deviceName);
         return deviceEntities;
     }
@@ -88,7 +88,6 @@ public class ISpaceDeviceServiceImpl implements ISpaceDeviceService {
         // 清除Redis缓存
         clearRedis.clearRedisCache();
         redisCache.deleteObject(String.valueOf(spaceDeviceDto.getSpaceId()));
-
 
         log.info("spaceDeviceList===={}",spaceDeviceList.size());
 

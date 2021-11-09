@@ -6,6 +6,7 @@ import com.lab.framework.web.page.TableDataInfo;
 import com.lab.project.smartoffice.common.space.domain.SpaceEntity;
 import com.lab.project.smartoffice.common.space.service.ISpaceService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/smartOffice/space" )
 @AllArgsConstructor
+@Slf4j
 public class SpaceController extends BaseController {
 
     private ISpaceService spaceService;
@@ -26,9 +28,10 @@ public class SpaceController extends BaseController {
     }
 
     @GetMapping("/list")
-    public TableDataInfo getSpaceList(String spaceType){
+    public TableDataInfo getSpaceList(String spaceType, String spaceName, String spacePosition){
         startPage();
-        return getDataTable( spaceService.getSpaceList(spaceType));
+        log.info("spaceName=={},spacePosition=={}",spaceName,spacePosition);
+        return getDataTable( spaceService.getSpaceList(spaceType, spaceName, spacePosition));
     }
 
     @PutMapping("/remove" )

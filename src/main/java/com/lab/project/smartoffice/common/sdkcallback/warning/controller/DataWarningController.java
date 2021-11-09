@@ -8,6 +8,7 @@ import com.lab.project.smartoffice.common.sdkcallback.warning.domain.dto.DataWar
 import com.lab.project.smartoffice.common.sdkcallback.warning.service.DataWarningService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.ws.rs.PUT;
@@ -20,12 +21,21 @@ import javax.ws.rs.PUT;
 @RestController
 @RequestMapping("/smartOffice/dataWarning")
 @AllArgsConstructor
+@Slf4j
 public class DataWarningController extends BaseController {
     private DataWarningService dataWarningService;
 
     @GetMapping("/list")
     public TableDataInfo list(DataWarningDTO dataWarningDTO){
         startPage();
+//        log.info("dataWarningDTO=={}",dataWarningDTO.toString());
+//        log.info("deviceName=={}",dataWarningDTO.getDeviceName());
+//        log.info("dataWarningType=={}",dataWarningDTO.getDataWarningType());
+//        log.info("processingStatus=={}",dataWarningDTO.getProcessingStatus());
+//        log.info("beginTime=={}",dataWarningDTO.getBeginTime());
+//        log.info("endTime=={}",dataWarningDTO.getEndTime());
+//        log.info("spaceType=={}",dataWarningDTO.getSpaceType());
+
         return getDataTable(dataWarningService.list(dataWarningDTO));
     }
 

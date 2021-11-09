@@ -23,7 +23,10 @@ public interface SpaceMapper {
      */
     Integer insertSpace(SpaceEntity spaceEntity);
 
-    List<SpaceEntity> getSpaceList(@Param("spaceType") String spaceType);
+    List<SpaceEntity> getSpaceList(@Param("spaceType") String spaceType,
+                                   @Param("spaceName") String spaceName,
+                                   @Param("spacePosition") String spacePosition);
+
 
     /**
      * 删除空间信息

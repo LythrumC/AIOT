@@ -24,7 +24,7 @@ public interface ISpaceService {
      * @param spaceType
      * @return
      */
-    List<SpaceEntity> getSpaceList(String spaceType);
+    List<SpaceEntity> getSpaceList(String spaceType, String spaceName, String spacePosition);
 
     /**
      * 删除空间信息
